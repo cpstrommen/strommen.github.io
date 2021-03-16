@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>Christian Strommen</title>
+<title>CAD Portfolio - Christian Strommen</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/styles/w3.css">
@@ -10,19 +10,123 @@
 <body class="w3-content" style="max-width:1920px">
 
     <div class="w3-row">
-        <div class="w3-half w3-ios-dark-blue w3-container" style="height:1080px">
+        <div class="w3-half w3-ios-dark-blue w3-container" style="height:640px">
             <div class="w3-padding-64 w3-center">
               <h1>CNC Moldmaking for Injection Molding</h1>
               <div class="w3-left-align w3-padding-large">
+                <p>I developed and implemented a workflow process that would allow for the sub-24 hour turnaround of injection molded parts through custom, in-house moldmaking processes. The file shown is the lower section of one of the more difficult molds I developed in this process, which would go on to full scale production shortly after.</p>
+                <p>In this project, I developed a process in which a small CNC mill could rapidly produce injection molds for new parts. Normally, 3D printed parts would be used to save on turnaround time (24 hours for 3D printed, 30 days minimum for injection molded). This allowed for customers to receive a more refined prototype on the same timeline a less developed prototype would normally be produced. In this project, I learned the basics of CNC and CAM along with small-scale injection molding.</p>
+              </div>
+            </div>
+        </div>
+        <div class="w3-half w3-flat-midnight-blue w3-container" style="height:640px">
+            <div class="w3-padding-64 w3-center">
+                <div class="w3-left-align w3-padding-large">
+                    
+                    <div id="stl_1" style="width:960px;height:500px;margin:0 auto;"></div>
+
+                    <script src="stl_viewer.min.js"></script>        
+                    <script>
+                        var stl_viewer=new StlViewer
+                        (
+                            document.getElementById("stl_1"),
+                            {
+                                models:
+                                [
+                                    {filename:"part1.stl"}
+                                ]
+                            }
+                        );
+                    </script>
+
+
+
+                  <p></p>
+                </div>
+              </div>
+        </div>
+      </div>
+
+
+      <div class="w3-row">
+        <div class="w3-half w3-flat-midnight-blue w3-container" style="height:640px">
+            <div class="w3-padding-64 w3-center">
+              <div class="w3-left-align w3-padding-large">
+
+                <div id="stl_2" style="width:720px;height:500px;margin:0 auto;"></div>
+
+                    <script src="stl_viewer.min.js"></script>        
+                    <script>
+                        var stl_viewer=new StlViewer
+                        (
+                            document.getElementById("stl_2"),
+                            {
+                                models:
+                                [
+                                    {filename:"part2.stl"}
+                                ]
+                            }
+                        );
+                    </script>
+
+
+
+
                 <p></p>
               </div>
             </div>
         </div>
-        <div class="w3-half w3-ios-dark-blue w3-container" style="height:1080px">
-            <script src="https://embed.github.com/view/3d/Cpstrommen/Personal-Website/main/assets/part1.stl"></script>
+        <div class="w3-half w3-ios-dark-blue w3-container" style="height:640px">
+            <div class="w3-padding-64 w3-center">
+                <h1>Optimizing GPU Water Block Designs with Thermal Simulation</h1>
+                <div class="w3-left-align w3-padding-large">
+                  <p>In my spare time, I noticed that the GPU chip on my graphics card was losing efficiency due to overheating, and I decided to design and build a custom water block to ensure optimal thermal transfer into the cooling loop. Through the use of Autodesk Fusion 360 thermal simulations, I was able to tweak and use self-optimization tools to design the optimal water block for the situation.</p>
+                  <p>I was then able to manufacture this design using CNC technology and along with other parts of the loop I designed, construct a heat dissipation system for my Radeon HD6970 graphics card.</p> 
+                </div>
+              </div>
         </div>
       </div>
 
+
+      <div class="w3-row">
+        <div class="w3-half w3-ios-dark-blue w3-container" style="height:640px">
+            <div class="w3-padding-64 w3-center">
+              <h1>Liquid Flow Optimization with COMSOL</h1>
+              <div class="w3-left-align w3-padding-large">
+                <p>I developed projects to test our thermal simulation capabilities by integrating sensors and fluid modeling to calculate relative error of our simulations.</p>
+                <p>In this specific part, we needed to make an exact model of all of the components of a thermal test loop to ensure the greatest accuracy of our tests, and the part pictured happened to be the bottleneck of the entire looped system.</p>
+              </div>
+            </div>
+        </div>
+        <div class="w3-half w3-flat-midnight-blue w3-container" style="height:640px">
+            <div class="w3-padding-64 w3-center">
+                <div class="w3-left-align w3-padding-large">
+                    
+                    <div id="stl_3" style="width:960px;height:500px;margin:0 auto;"></div>
+
+                    <script src="stl_viewer.min.js"></script>        
+                    <script>
+                        var stl_viewer=new StlViewer
+                        (
+                            document.getElementById("stl_3"),
+                            {
+                                models:
+                                [
+                                    {filename:"part3.stl"}
+                                ]
+                            }
+                        );
+                    </script>
+
+
+
+
+
+                  <p></p>
+                </div>
+              </div>
+        </div>
+      </div>
 
 
 <!-- Footer -->
