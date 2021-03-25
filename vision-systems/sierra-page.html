@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<title>Vision Systems - Christian Strommen</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/styles/w3.css">
+<link rel="stylesheet" href="/styles/w3-colors-ios.css">
+<link rel="stylesheet" href="/styles/w3-colors-flat.css">
+
+<body class="w3-content" style="max-width:1920px">
+
+    <div class="w3-row">
+        <div class="w3-half w3-ios-dark-blue w3-container" style="height:1080px">
+            <div class="w3-padding-64 w3-center">
+              <h1>Computer Vision ID Verification</h1>
+              <div class="w3-left-align w3-padding-large">
+                <p>We are currently in the process of developing the next generation of ID scanning technology, giving retail businesses the power of AI and computer vision to verify the indentities of their customers.</p>
+                    <div class="w3-padding-64">
+                        <a href="vision-systems.html" class="w3-button w3-flat-midnight-blue w3-block w3-hover-black w3-padding-16" target="_blank" rel="noopener noreferrer">Try out a scaled down version here</a>
+                        <a href="https://www.linkedin.com/company/sierra-vision-systems" class="w3-button w3-flat-midnight-blue w3-block w3-hover-blue w3-padding-16" target="_blank" rel="noopener noreferrer">Sierra Vision Systems LinkedIn</a>
+                    </div>
+              </div>
+            </div>
+        </div>
+        <div class="w3-half w3-flat-midnight-blue w3-container" style="height:1080px">
+            <div class="w3-padding-64 w3-center">
+                <div class="w3-left-align w3-padding-large">
+                    
+                    <div id="stl_1" style="width:960px;height:500px;margin:0 auto;"></div>
+
+                    <script src="stl_viewer.min.js"></script>        
+                    <script>
+                        var stl_viewer=new StlViewer
+                        (
+                            document.getElementById("stl_1"),
+                            {
+                                models:
+                                [
+                                    {filename:"sierra.stl"}
+                                ]
+                            }
+                        );
+                    </script>
+
+
+                </div>
+              </div>
+        </div>
+      </div>
+
+
+
+<!-- Footer -->
+<footer class="w3-container w3-black w3-padding-16">
+    <p><b>Powered by Christian's Raspberry Pi Server</b></p>
+  </footer>
+  
+</body>
+</html>
