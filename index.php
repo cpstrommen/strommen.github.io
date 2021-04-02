@@ -63,6 +63,8 @@ fclose($fh);
       <a href="/vision-systems/sierra-page.html" class="w3-button w3-flat-midnight-blue w3-block w3-hover-green w3-padding-16">Side Projects</a>
       <a href="https://github.com/Cpstrommen" class="w3-button w3-flat-midnight-blue w3-block w3-hover-purple w3-padding-16" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a href="https://www.discogs.com/user/cpstrommen/collection" class="w3-button w3-flat-midnight-blue w3-block w3-hover-black w3-padding-16" target="_blank" rel="noopener noreferrer">Vinyl Record Collection</a>
+      <iframe src="https://open.spotify.com/embed/playlist/18DjdsA4VraZLVwL9tlZJH" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      
     </div>
   </div>
   <div class="w3-half w3-ios-dark-blue w3-container" style="height:1080px">
