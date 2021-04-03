@@ -9,7 +9,7 @@ $ref = $_SERVER['HTTP_REFERER'];
 $hostname = gethostbyaddr($_SERVER['REMOTE_ADDR']);
  
 //opening the log file
-$fh = fopen('userlog.txt', 'a');
+$fh = fopen(date(d/m/Y)+"log.txt", 'a');
 
 //printing the IP data
 fwrite($fh, 'IP Address: '."".$ip ."    ");
