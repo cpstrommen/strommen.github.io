@@ -1,38 +1,6 @@
 <?php
-
-//pulling the IP data
-$protocol = $_SERVER['SERVER_PROTOCOL'];
-$ip = $_SERVER['REMOTE_ADDR'];
-$port = $_SERVER['REMOTE_PORT'];
-$agent = $_SERVER['HTTP_USER_AGENT'];
-$ref = $_SERVER['HTTP_REFERER'];
-$hostname = gethostbyaddr($_SERVER['REMOTE_ADDR']);
- 
-//opening the log file
-$fh = fopen(date(d/m/Y)+"log.txt", 'a');
-
-//printing the IP data
-fwrite($fh, 'IP Address: '."".$ip ."    ");
-fwrite($fh, 'Hostname: '."".$hostname ."    ");
-fwrite($fh, 'Port Number: '."".$port ."    ");
-fwrite($fh, 'User Agent: '."".$agent ."    ");
-fwrite($fh, 'HTTP Referer: '."".$ref ."    ");
-fwrite($fh, 'Date (dd/mm/yyyy): '."".date(d/m/Y) ."    ");
-fwrite($fh, 'Time: '."".date(H:i:s) ."      Geolocation Data:   ")
-
-//now the NSA type stuff--------------------------------------------------------------------------------
-$ipdat = @json_decode(file_get_contents(
-    "http://www.geoplugin.net/json.gp?ip=" . $ip));
-
-//printing all the geolocation data
-fwrite($fh, 'Country: '."".$ipdat->geoplugin_countryName."  ");
-fwrite($fh, 'City Name: '."".$ipdat->geoplugin_city."   ");
-fwrite($fh, 'Latitude: '."".$ipdat->geoplugin_latitude."    ");
-fwrite($fh, 'Longitude: '."".$ipdat->geoplugin_longitude."\n");
-
-//closing the log file
-fclose($fh);
-
+$vist_page     =   "index.php";
+include "logger.php";
 ?>
 
 <!DOCTYPE html>
@@ -63,7 +31,6 @@ fclose($fh);
       <a href="/vision-systems/sierra-page.html" class="w3-button w3-flat-midnight-blue w3-block w3-hover-green w3-padding-16">Side Projects</a>
       <a href="https://github.com/Cpstrommen" class="w3-button w3-flat-midnight-blue w3-block w3-hover-purple w3-padding-16" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a href="https://www.discogs.com/user/cpstrommen/collection" class="w3-button w3-flat-midnight-blue w3-block w3-hover-black w3-padding-16" target="_blank" rel="noopener noreferrer">Vinyl Record Collection</a>
-      <iframe src="https://open.spotify.com/embed/playlist/18DjdsA4VraZLVwL9tlZJH" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
       
     </div>
   </div>
