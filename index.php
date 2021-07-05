@@ -19,7 +19,6 @@ include "logger.php";
   <div class="w3-half w3-flat-midnight-blue w3-container w3-center" style="height:1080px">
     <div class="w3-padding-64">
       <h1>Christian Strommen</h1>
-      <p>Design Mechanical Engineer in the Minneapolis/St Paul Area</p>
     </div>
     <div class="w3-padding-64">
       <a href="#" class="w3-button w3-flat-midnight-blue w3-block w3-hover-blue-grey w3-padding-16">Home</a>
@@ -42,7 +41,6 @@ include "logger.php";
         <p>I am a robotics, microprocessor, small engine, and aviation enthusiast that explores various projects including 3D additive and subtractive manufacturing systems, 3D gantry and robotics systems, embedded Arduino projects, racing drones, and mechanical design. I am well-versed in Arduino and CAD/CAM software, and have built many 3D printers from scratch, and am always excited to develop skills in new facets of the engineering world. I am a hard-working maker with experience, curiosity, and determination.</p>
         <p>Feel free to explore the links on the left for examples of my work and links to relevent sites.</p>
         <p>Email: cpstrommen@gmail.com</p>
-        <p>Cell: 651-263-6193</p>
       </div>
     </div>
   </div>
@@ -50,7 +48,7 @@ include "logger.php";
 
 <!-- Footer -->
 <footer class="w3-container w3-black w3-padding-16">
-  <p><b>Powered by Christian's Raspberry Pi Server</b></p>
+  <p><b>Powered by Raspberry Pi Server</b></p>
 </footer>
 
 </body>
