@@ -1,0 +1,31 @@
+
+Domain Overview: strommen.dev
+
+index: strommen.dev
+
+
+ - strommen.dev pages - 
+
+strommen.dev/design.html
+strommen.dev/development.html
+strommen.dev/hosting.html
+strommen.dev/prototyping.html
+
+
+
+ - local services forwarded onto subdomains - 
+
+print.strommen.dev - print livestream
+printadmin.strommen.dev - printer control screen
+
+
+
+ - personal landing pages - 
+
+christian.strommen.dev - linktree basically
+
+
+
+ - services using domain to mask ip - 
+
+mc.strommen.dev - minecraft server running in docker container

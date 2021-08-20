@@ -3,14 +3,39 @@
 <title>CAD Portfolio - Christian Strommen</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/styles/w3.css">
-<link rel="stylesheet" href="/styles/w3-colors-ios.css">
-<link rel="stylesheet" href="/styles/w3-colors-flat.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-dark-grey.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-ios.css">
 
 <body class="w3-content" style="max-width:1920px">
 
+<style>
+  body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+
+body, html {
+  height: 100%;
+  line-height: 1.8;
+}
+</style>
+
+  <!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme-d5 w3-card" id="myNavbar">
+    <a href="www.strommen.dev" class="w3-bar-item w3-button w3-wide"><b>strommen.dev</b></a>
+    <!-- Right-sided navbar links -->
+    
+    <!-- Hide right-floated links on small screens and replace them with a menu icon -->
+
+    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
+</div>
+
     <div class="w3-row">
-        <div class="w3-half w3-ios-dark-blue w3-container" style="height:640px">
+        <div class="w3-half w3-theme-d4 w3-container" style="height:640px">
             <div class="w3-padding-64 w3-center">
               <h1>CNC Moldmaking for Injection Molding</h1>
               <div class="w3-left-align w3-padding-large">
@@ -19,7 +44,7 @@
               </div>
             </div>
         </div>
-        <div class="w3-half w3-flat-midnight-blue w3-container" style="height:640px">
+        <div class="w3-half w3-theme-d3 w3-container" style="height:640px">
             <div class="w3-padding-64 w3-center">
                 <div class="w3-left-align w3-padding-large">
                     
@@ -47,7 +72,7 @@
 
 
       <div class="w3-row">
-        <div class="w3-half w3-flat-midnight-blue w3-container" style="height:640px">
+        <div class="w3-half w3-theme-d3 w3-container" style="height:640px">
             <div class="w3-padding-64 w3-center">
               <div class="w3-left-align w3-padding-large">
 
@@ -72,7 +97,7 @@
               </div>
             </div>
         </div>
-        <div class="w3-half w3-ios-dark-blue w3-container" style="height:640px">
+        <div class="w3-half w3-theme-d4 w3-container" style="height:640px">
             <div class="w3-padding-64 w3-center">
                 <h1>Optimizing GPU Water Block Designs with Thermal Simulation</h1>
                 <div class="w3-left-align w3-padding-large">
@@ -85,7 +110,7 @@
 
 
       <div class="w3-row">
-        <div class="w3-half w3-ios-dark-blue w3-container" style="height:640px">
+        <div class="w3-half w3-theme-d4 w3-container" style="height:640px">
             <div class="w3-padding-64 w3-center">
               <h1>Liquid Flow Optimization with COMSOL</h1>
               <div class="w3-left-align w3-padding-large">
@@ -94,7 +119,7 @@
               </div>
             </div>
         </div>
-        <div class="w3-half w3-flat-midnight-blue w3-container" style="height:640px">
+        <div class="w3-half w3-theme-d3 w3-container" style="height:640px">
             <div class="w3-padding-64 w3-center">
                 <div class="w3-left-align w3-padding-large">
                     
@@ -121,8 +146,8 @@
 
 
 <!-- Footer -->
-<footer class="w3-container w3-black w3-padding-16">
-    <p><b>Powered by Raspberry Pi Server</b></p>
+<footer class="w3-container w3-theme-d5 w3-padding-16">
+    <p>Powered by strommen.dev</p>
   </footer>
   
 </body>
