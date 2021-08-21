@@ -1,4 +1,22 @@
 
+Hardware:
+ - Used server
+    - Proxmox Hypervisor:
+        - strommen.dev
+        - mineos turnkey (https://minecraft.codeemo.com/)
+        - portainer (docker):
+            - pihole
+            - all docker containers
+            - guacamole
+            - vpn server
+
+ - Alistair Desktop
+    - Windows 10:
+        - Parsec game streaming
+        - Shared Files
+        - Laptop Backup
+
+
 Domain Overview: strommen.dev
 
 index: strommen.dev
