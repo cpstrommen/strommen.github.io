@@ -46,4 +46,4 @@ christian.strommen.dev - linktree basically
 
  - services using domain to mask ip - 
 
-mc.strommen.dev - minecraft server running in docker container
+mc.strommen.dev - minecraft server running in docker container or mineos
