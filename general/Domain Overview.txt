@@ -10,10 +10,15 @@ Hardware:
             - vpn server
 
  - Alistair Desktop
-    - Windows 10:
+    - Windows 10: Not used
         - Parsec game streaming
         - Shared Files
         - Laptop Backup
+    - Ubuntu Server: Active
+        - Portainer 
+        - Minecraft server
+        - Docker Containers:
+            - 
 
 
 Domain Overview: strommen.dev
