@@ -5,15 +5,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<meta property="og:image" content="assets/favicon.png" />
+<meta property="og:description" content="Mechanical Engineer in the Minneapolis/St Paul Area" />
+<meta property="og:url"content="http://christian.strommen.dev" />
+<meta property="og:title" content="Christian Strommen" />
+
 <link rel="stylesheet" href="styles/w3.css">
-<link rel="stylesheet" href="styles/w3-colors-flat.css">
-<link rel="stylesheet" href="styles/w3-theme-dark-grey.css">
+<link rel="stylesheet" href="styles/strommen-theme.css">
 <link rel="stylesheet" href="styles/strommen-colors.css">
+
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
-
 
 <body class="w3-content" style="max-width:1920px">
 
@@ -29,7 +33,7 @@ body, html {
 
 <!-- First Grid: Logo & About -->
 <div class="w3-row">
-  <div class="w3-half strommen-dark w3-container w3-center" style="height:1080px">
+  <div class="w3-half strommen-theme-d4 w3-container w3-center" style="height:1080px">
     <div class="w3-padding-32">
       <h1><b>Christian Strommen</b></h1>
       <p>Mechanical Engineer in the Minneapolis/St Paul Area</p>
@@ -39,33 +43,77 @@ body, html {
       <p>Email: cpstrommen@gmail.com</p>
     </div>
     <div class="w3-padding-32">
-      <a href="/work/work.html" class="w3-button strommen-light w3-block w3-hover-teal w3-padding-16">CAD Portfolio</a>
-      <a href="https://www.linkedin.com/in/christianstrommen/" class="w3-button strommen-light w3-block w3-hover-blue w3-padding-16" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      <a href="https://umn.joinhandshake.com/users/24314153" class="w3-button strommen-light w3-block w3-hover-red w3-padding-16" target="_blank" rel="noopener noreferrer">Handshake</a>
-      <a href="/assets/work.pdf" class="w3-button strommen-light w3-block w3-hover-grey w3-padding-16" target="_blank" rel="noopener noreferrer">Project Portfolio (pdf)</a>
-      <a href="/assets/resume.pdf" class="w3-button strommen-light w3-block w3-hover-orange w3-padding-16" target="_blank" rel="noopener noreferrer">Resume (pdf)</a>
-      <a href="https://github.com/Cpstrommen" class="w3-button strommen-light w3-block w3-hover-purple w3-padding-16" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a href="https://www.discogs.com/user/cpstrommen/collection" class="w3-button strommen-light w3-block w3-hover-black w3-padding-16" target="_blank" rel="noopener noreferrer">Vinyl Record Collection</a>
+      <a href="/work/work.html" class="w3-button w3-flat-wet-asphalt w3-block w3-hover-teal w3-padding-16">Interactive CAD Portfolio</a>
+      <a href="https://www.linkedin.com/in/christianstrommen/" class="w3-button w3-flat-wet-asphalt w3-block w3-hover-blue w3-padding-16" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://umn.joinhandshake.com/users/24314153" class="w3-button w3-flat-wet-asphalt w3-block w3-hover-red w3-padding-16" target="_blank" rel="noopener noreferrer">Handshake</a>
+      <a href="/assets/work.pdf" class="w3-button w3-flat-wet-asphalt w3-block w3-hover-grey w3-padding-16" target="_blank" rel="noopener noreferrer">Project Portfolio (pdf)</a>
+      <a href="/assets/resume.pdf" class="w3-button w3-flat-wet-asphalt w3-block w3-hover-orange w3-padding-16" target="_blank" rel="noopener noreferrer">Resume (pdf)</a>
+      <a href="https://github.com/Cpstrommen" class="w3-button w3-flat-wet-asphalt w3-block w3-hover-purple w3-padding-16" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.discogs.com/user/cpstrommen/collection" class="w3-button w3-flat-wet-asphalt w3-block w3-hover-black w3-padding-16" target="_blank" rel="noopener noreferrer">Vinyl Record Collection</a>
 
     </div>
     <div class="w3-padding-16">
       <img src="assets/Ethereum_QR_code.png" alt="Ethereum Address QR Code" style="height:150px">
     </div>
   </div>
-  <div class="w3-half strommen-green w3-container" style="height:1080px">
-    <div class="w3-padding-64 w3-center">
-      <h1>Featured Projects</h1>
+  <div class="w3-half strommen-theme-d3 w3-container" style="height:1080px">
+    <div class="w3-padding-32 w3-center">
+      <h1><b>Featured Projects</b></h1>
+        <p></p>
         <div>
+
+          <div class="w3-content w3-padding-64 w3-center" style="max-width:1080px">
+            <img class="mySlides w3-center" src="assets/slides/sanding machine.JPG" style="width:100%">
+            <img class="mySlides w3-center" src="assets/slides/photographer.JPG" style="width:100%;display:none">
+            <img class="mySlides w3-center" src="assets/slides/port protector.PNG" style="width:100%;display:none">
           
+            <div class="w3-row-padding w3-section">
+              <div class="w3-col s4">
+                <img class="demo w3-opacity" src="assets/slides/sanding machine.JPG"
+                style="width:100%" onclick="currentDiv(1)">
+              </div>
+              <div class="w3-col s4">
+                <img class="demo w3-opacity" src="assets/slides/photographer.JPG"
+                style="width:100%" onclick="currentDiv(2)">
+              </div>
+              <div class="w3-col s4">
+                <img class="demo w3-opacity" src="assets/slides/port protector.PNG"
+                style="width:100%" onclick="currentDiv(3)">
+              </div>
+            </div>
+          </div>
         </div>
     </div>
   </div>
 </div>
 
 <!-- Footer -->
-<footer class="w3-container strommen-black w3-padding-16">
-  <p>Powered by strommen.dev</p>
+<footer class="w3-container strommen-theme-d5 w3-padding-16">
+  <p>Powered by <b>strommen.dev</b></p>
 </footer>
+
+<script>
+function currentDiv(n) {
+  showDivs(slideIndex = n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" w3-opacity-off", "");
+  }
+  x[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " w3-opacity-off";
+}
+</script>
+
 
 </body>
 </html>
