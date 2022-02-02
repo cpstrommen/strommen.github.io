@@ -151,7 +151,7 @@
 .service-item {
   padding: 30px;
   text-align: center;
-  background: var(--secondary);
+  background: var(--primary);
 }
 
 .service-item i {
