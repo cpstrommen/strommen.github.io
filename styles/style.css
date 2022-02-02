@@ -1,7 +1,7 @@
-/********** Template CSS **********/
+
 :root {
   --primary: #4a5866;
-  --secondary: #4d5b69;
+  --secondary: #4a5866;
   --light: #F2F2F2;
   --dark: #3d4247;
 }
@@ -85,7 +85,7 @@
 }
 
 .back-to-top i:hover {
-  color: var(--dark);
+  color: var(--light);
 }
 
 .back-to-top {
