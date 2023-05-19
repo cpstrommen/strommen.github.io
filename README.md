@@ -10,5 +10,3 @@
 ## Future Improvements
 - Migrating CAD portfolio page to bootstrap JS and optimize 3D elements for mobile
 - Migrating entire site to a full stack to allow for server-side non-static elements
-- Possible web3 integration with wallet connect as user login
-- SEO and link visibility
