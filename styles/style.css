@@ -1,9 +1,9 @@
 
 :root {
-  --primary: #4a5866;
-  --secondary: #4a5866;
+  --primary: #373737;
+  --secondary: #4e4e4e;
   --light: #F2F2F2;
-  --dark: #3d4247;
+  --dark: #2a2a2a;
 }
 
 #spinner {
@@ -25,6 +25,25 @@
   }
 }
 
+body {
+  background-color: var(--dark);
+  color: var(--dark);
+  font-family: 'Mukta', sans-serif;
+  font-style: normal;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--light);
+}
+
+a {
+  color: var(--light);
+}
+
+p {
+  color: var(--light);
+}
+
 .fw-semi-bold {
   font-weight: 600;
 }
@@ -36,16 +55,19 @@
 .btn-square {
   width: 40px;
   height: 40px;
+  background-color: var(--primary);
 }
 
 .btn-sm-square {
   width: 30px;
   height: 30px;
+  background-color: var(--primary);
 }
 
 .btn-lg-square {
   width: 50px;
   height: 50px;
+  background-color: var(--primary);
 }
 
 .btn-square,
@@ -81,7 +103,7 @@
 }
 
 .back-to-top i {
-  color: var(--primary);
+  color: var(--light);
 }
 
 .back-to-top i:hover {
@@ -194,6 +216,7 @@
   opacity: 0;
   transition: .3s;
   transition-delay: .3s;
+  
 }
 
 .portfolio-item:hover i {
@@ -210,9 +233,10 @@
   margin: 0 5px;
   width: 15px;
   height: 15px;
-  background: var(--light);
+  background: var(--dark);
 }
 
 .testimonial-carousel .owl-dot.active {
-  background: var(--primary);
+  background: var(--dark);
+  background-color: var(--dark);
 }
