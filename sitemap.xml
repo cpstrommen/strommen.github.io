@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://christian.strommen.dev/</loc>
+        <loc>https://strommen.ch/</loc>
         <lastmod>2022-01-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://christian.strommen.dev/about.html</loc>
+        <loc>https://strommen.ch/about.html</loc>
         <lastmod>2022-01-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://christian.strommen.dev/articles/plcd-article.html</loc>
+        <loc>https://strommen.ch/articles/plcd-article.html</loc>
         <lastmod>2023-05-19</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
