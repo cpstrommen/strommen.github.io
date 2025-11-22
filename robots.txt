@@ -1,0 +1,6 @@
+# robots.txt for https://strommen.ch/
+
+User-agent: *
+Allow: /
+
+Sitemap: https://strommen.ch/sitemap.xml

@@ -1,21 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <url>
-        <loc>https://strommen.ch/</loc>
-        <lastmod>2022-01-01</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>1.0</priority>
-    </url>
-    <url>
-        <loc>https://strommen.ch/about.html</loc>
-        <lastmod>2022-01-01</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://strommen.ch/articles/plcd-article.html</loc>
-        <lastmod>2023-05-19</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-    </url>
+
+  <!-- Home -->
+  <url>
+    <loc>https://strommen.ch/</loc>
+    <lastmod>2025-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <!-- About page -->
+  <url>
+    <loc>https://strommen.ch/about.html</loc>
+    <lastmod>2025-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Articles -->
+  <url>
+    <loc>https://strommen.ch/articles/The%20Future%20of%20US%20Recreational%20General%20Aviation.pdf</loc>
+    <lastmod>2025-11-21</lastmod>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://strommen.ch/articles/atc/atc_whitepaper.pdf</loc>
+    <lastmod>2025-11-21</lastmod>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://strommen.ch/articles/boomer_real_estate/boomer_real_estate.pdf</loc>
+    <lastmod>2025-11-21</lastmod>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://strommen.ch/articles/plcd-article.html</loc>
+    <lastmod>2025-11-21</lastmod>
+    <changefreq>yearly</changefreq>
+  </url>
+
 </urlset>
+
