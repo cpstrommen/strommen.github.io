@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Flight Map – Christian Strommen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive map of flights flown by Christian Strommen.">
+  <meta name="keywords" content="Christian Strommen, flight map, aviation, routes">
+
+  <!-- Favicon -->
+  <link href="assets/favicon.png" rel="icon">
+  <link href="assets/favicon.png" rel="shortcut icon">
+  <link rel="shortcut icon" type="image/png" href="assets/favicon.png"/>
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Flight Map – Christian Strommen">
+  <meta property="og:description" content="Interactive map of personal and commercial flights.">
+  <meta property="og:image" content="assets/favicon.png">
+  <meta property="og:url" content="https://strommen.ch/map.html">
+
+  <!-- Fonts & Icons (reuse from main site) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Libraries Stylesheet -->
+  <link href="lib/animate/animate.min.css" rel="stylesheet">
+
+  <!-- Bootstrap + site styles -->
+  <link href="styles/bootstrap.min.css" rel="stylesheet">
+  <link href="styles/style.css" rel="stylesheet">
+
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
+  <style>
+    #flight-map {
+      width: 100%;
+      height: 600px;
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+    .flight-map-legend {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+    .legend-swatch {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .legend-swatch-pic {
+      background-color: #00bcd4; /* PIC flights */
+    }
+    .legend-swatch-commercial {
+      background-color: #ff9800; /* Commercial flights */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container py-5">
+    <div class="row g-5">
+      <div class="col-12">
+        <h1 class="title pb-3 mb-3">Flight Map</h1>
+        <!--
+        <p class="text-light mb-4">
+          A visual log of flights I’ve taken. Flights I flew as pilot in command are shown in one color, commercial flights in another.
+        </p>
+        -->
+      </div>
+
+      <div class="col-12">
+        <div id="flight-map" class="shadow"></div>
+      </div>
+
+      <div class="col-12 mt-3 flight-map-legend text-light">
+        <span class="me-3">
+          <span class="legend-swatch legend-swatch-pic"></span>
+          PIC / personal flights
+        </span>
+        <span>
+          <span class="legend-swatch legend-swatch-commercial"></span>
+          Commercial flights
+        </span>
+      </div>
+
+      <div class="col-12 mt-5">
+        <div class="text-light text-center">
+          <p class="m-0">Powered by <b>strommen.ch</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Leaflet -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <!-- Your flight data -->
+  <script src="js/flight-map-data.js"></script>
+
+  <script>
+    // Create the map
+    const map = L.map('flight-map', {
+      scrollWheelZoom: true,
+      worldCopyJump: true
+    }).setView([30, 0], 2);
+
+    // Basemap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 10,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Bounds to fit all flights
+    const allBounds = L.latLngBounds();
+
+    // Colors for each flight type
+    const COLORS = {
+      pic: '#00bcd4',        // flights you flew
+      commercial: '#ff9800'  // airline flights
+    };
+
+    if (Array.isArray(window.flightLegs) && window.flightLegs.length > 0) {
+      window.flightLegs.forEach((leg) => {
+        const from = L.latLng(leg.originLat, leg.originLng);
+        const to   = L.latLng(leg.destLat, leg.destLng);
+
+        const type = leg.type === 'pic' ? 'pic' : 'commercial';
+        const color = COLORS[type];
+
+        // Draw the line
+        const polyline = L.polyline([from, to], {
+          color,
+          weight: 2.5,
+          opacity: 0.8
+        }).addTo(map);
+
+        // Optionally add small markers at endpoints
+        const circleOptions = {
+          radius: 3,
+          color,
+          weight: 1,
+          fillColor: color,
+          fillOpacity: 0.9
+        };
+        const originMarker = L.circleMarker(from, circleOptions).addTo(map);
+        const destMarker   = L.circleMarker(to, circleOptions).addTo(map);
+
+        // Shared popup content
+        const popupHtml = `
+          <strong>${leg.origin} → ${leg.dest}</strong><br/>
+          <small>${leg.originName || ''}${leg.originName ? ' – ' : ''}${leg.destName || ''}</small><br/>
+          ${leg.date ? `<small>${leg.date}</small><br/>` : ''}
+          <small>Type: ${type === 'pic' ? 'PIC / personal' : 'Commercial'}</small>
+          ${leg.notes ? `<br/>${leg.notes}` : ''}
+        `;
+
+        polyline.bindPopup(popupHtml);
+        originMarker.bindPopup(popupHtml);
+        destMarker.bindPopup(popupHtml);
+
+        allBounds.extend(from);
+        allBounds.extend(to);
+      });
+
+      // Fit map to all flights, with some padding
+      map.fitBounds(allBounds, { padding: [40, 40] });
+    }
+  </script>
+</body>
+</html>
