@@ -1,9 +1,9 @@
 
 :root {
-  --primary: #2d2d2d;
-  --secondary: #4e4e4e;
+  --primary: #242424;
+  --secondary: #444444;
   --light: #F2F2F2;
-  --dark: #232323;
+  --dark: #1f1f1f;
 }
 
 #spinner {
