@@ -823,25 +823,27 @@ window.flightLegs = [
   },
 
   // One-way with connection on 2026-01-01: MSP → DFW → RIC
+  // MSP → DTW on 2026-01-01
   {
     origin: "KMSP",
     originName: "Minneapolis–Saint Paul International Airport",
     originLat: 44.8820,
     originLng: -93.2218,
 
-    dest: "KDFW",
-    destName: "Dallas/Fort Worth International Airport",
-    destLat: 32.8998,
-    destLng: -97.0403,
+    dest: "KDTW",
+    destName: "Detroit Metropolitan Wayne County Airport",
+    destLat: 42.2162,
+    destLng: -83.3554,
 
     date: "2026-01-01",
     type: "commercial"
   },
+  // DTW → RIC on 2026-01-01
   {
-    origin: "KDFW",
-    originName: "Dallas/Fort Worth International Airport",
-    originLat: 32.8998,
-    originLng: -97.0403,
+    origin: "KDTW",
+    originName: "Detroit Metropolitan Wayne County Airport",
+    originLat: 42.2162,
+    originLng: -83.3554,
 
     dest: "KRIC",
     destName: "Richmond International Airport",
