@@ -693,5 +693,163 @@ window.flightLegs = [
 
     date: "2025-09-01",
     type: "commercial"
+  },
+  // MSP → DFW (undated)
+  {
+    origin: "KMSP",
+    originName: "Minneapolis–Saint Paul International Airport",
+    originLat: 44.8820,
+    originLng: -93.2218,
+
+    dest: "KDFW",
+    destName: "Dallas/Fort Worth International Airport",
+    destLat: 32.8998,
+    destLng: -97.0403,
+
+    date: "2000-01-01",
+    type: "commercial"
+  },
+
+  // SAT → MSP (return on same “trip”, undated)
+  {
+    origin: "KSAT",
+    originName: "San Antonio International Airport",
+    originLat: 29.5337,
+    originLng: -98.4698,
+
+    dest: "KMSP",
+    destName: "Minneapolis–Saint Paul International Airport",
+    destLat: 44.8820,
+    destLng: -93.2218,
+
+    date: "2000-01-01",
+    type: "commercial"
+  },
+
+  // MSP → SEA (undated)
+  {
+    origin: "KMSP",
+    originName: "Minneapolis–Saint Paul International Airport",
+    originLat: 44.8820,
+    originLng: -93.2218,
+
+    dest: "KSEA",
+    destName: "Seattle–Tacoma International Airport",
+    destLat: 47.4502,
+    destLng: -122.3088,
+
+    date: "2000-01-01",
+    type: "commercial"
+  },
+
+  // SEA → MSP (undated return)
+  {
+    origin: "KSEA",
+    originName: "Seattle–Tacoma International Airport",
+    originLat: 47.4502,
+    originLng: -122.3088,
+
+    dest: "KMSP",
+    destName: "Minneapolis–Saint Paul International Airport",
+    destLat: 44.8820,
+    destLng: -93.2218,
+
+    date: "2000-01-01",
+    type: "commercial"
+  },
+
+  // MSP → RDU (undated)
+  {
+    origin: "KMSP",
+    originName: "Minneapolis–Saint Paul International Airport",
+    originLat: 44.8820,
+    originLng: -93.2218,
+
+    dest: "KRDU",
+    destName: "Raleigh–Durham International Airport",
+    destLat: 35.8776,
+    destLng: -78.7875,
+
+    date: "2000-01-01",
+    type: "commercial"
+  },
+
+  // RDU → MSP (undated return)
+  {
+    origin: "KRDU",
+    originName: "Raleigh–Durham International Airport",
+    originLat: 35.8776,
+    originLng: -78.7875,
+
+    dest: "KMSP",
+    destName: "Minneapolis–Saint Paul International Airport",
+    destLat: 44.8820,
+    destLng: -93.2218,
+
+    date: "2000-01-01",
+    type: "commercial"
+  },
+
+  // MSP → SJU (undated)
+  {
+    origin: "KMSP",
+    originName: "Minneapolis–Saint Paul International Airport",
+    originLat: 44.8820,
+    originLng: -93.2218,
+
+    dest: "TJSJ",
+    destName: "Luis Muñoz Marín International Airport (San Juan)",
+    destLat: 18.4394,
+    destLng: -66.0010,
+
+    date: "2000-01-01",
+    type: "commercial"
+  },
+
+  // SJU → MSP (undated return)
+  {
+    origin: "TJSJ",
+    originName: "Luis Muñoz Marín International Airport (San Juan)",
+    originLat: 18.4394,
+    originLng: -66.0010,
+
+    dest: "KMSP",
+    destName: "Minneapolis–Saint Paul International Airport",
+    destLat: 44.8820,
+    destLng: -93.2218,
+
+    date: "2000-01-01",
+    type: "commercial"
+  },
+
+  // One-way with connection on 2026-01-01: MSP → DFW → RIC
+  {
+    origin: "KMSP",
+    originName: "Minneapolis–Saint Paul International Airport",
+    originLat: 44.8820,
+    originLng: -93.2218,
+
+    dest: "KDFW",
+    destName: "Dallas/Fort Worth International Airport",
+    destLat: 32.8998,
+    destLng: -97.0403,
+
+    date: "2026-01-01",
+    type: "commercial"
+  },
+  {
+    origin: "KDFW",
+    originName: "Dallas/Fort Worth International Airport",
+    originLat: 32.8998,
+    originLng: -97.0403,
+
+    dest: "KRIC",
+    destName: "Richmond International Airport",
+    destLat: 37.5052,
+    destLng: -77.3197,
+
+    date: "2026-01-01",
+    type: "commercial"
   }
+
 ];
