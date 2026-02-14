@@ -107,6 +107,33 @@ window.flightLegs = [
     type: "pic",
     notes: "N149AC"
   },
+  {
+    origin: "KOEO",
+    originLat: 45.3093,
+    originLng: -92.6901,
+
+    dest: "KSTC",
+    destLat: 45.5466,
+    destLng: -94.0599,
+
+    date: "2026-02-13",
+    type: "pic",
+    notes: "N5601A"
+  },
+  {
+    origin: "KSTC",
+    originLat: 45.5466,
+    originLng: -94.0599,
+
+    dest: "KOEO",
+    destLat: 45.3093,
+    destLng: -92.6901,
+
+    date: "2026-02-13",
+    type: "pic",
+    notes: "N5601A"
+  },
+
 
   // --- Commercial flights ---
 
