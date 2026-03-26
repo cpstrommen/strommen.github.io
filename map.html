@@ -7,32 +7,25 @@
   <meta name="description" content="Interactive map of flights flown by Christian Strommen.">
   <meta name="keywords" content="Christian Strommen, flight map, aviation, routes">
 
-  <!-- Favicon -->
   <link href="assets/favicon.png" rel="icon">
   <link href="assets/favicon.png" rel="shortcut icon">
   <link rel="shortcut icon" type="image/png" href="assets/favicon.png"/>
 
-  <!-- OpenGraph -->
   <meta property="og:title" content="Flight Map – Christian Strommen">
   <meta property="og:description" content="Interactive map of personal and commercial flights.">
   <meta property="og:image" content="assets/favicon.png">
   <meta property="og:url" content="https://strommen.ch/map.html">
 
-  <!-- Fonts & Icons (reuse from main site) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-  <!-- Libraries Stylesheet -->
   <link href="lib/animate/animate.min.css" rel="stylesheet">
-
-  <!-- Bootstrap + site styles -->
   <link href="styles/bootstrap.min.css" rel="stylesheet">
   <link href="styles/style.css" rel="stylesheet">
 
-  <!-- Leaflet -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -47,10 +40,12 @@
       border-radius: 0.75rem;
       overflow: hidden;
     }
+
     .flight-map-legend {
       font-size: 0.9rem;
       opacity: 0.85;
     }
+
     .legend-swatch {
       display: inline-block;
       width: 14px;
@@ -59,11 +54,13 @@
       margin-right: 6px;
       vertical-align: middle;
     }
+
     .legend-swatch-pic {
-      background-color: #00bcd4; /* PIC flights */
+      background-color: #00bcd4;
     }
+
     .legend-swatch-commercial {
-      background-color: #ff9800; /* Commercial flights */
+      background-color: #ff9800;
     }
   </style>
 </head>
@@ -73,11 +70,6 @@
     <div class="row g-5">
       <div class="col-12">
         <h1 class="title pb-3 mb-3">Travel</h1>
-        <!--
-        <p class="text-light mb-4">
-          A visual log of flights I’ve taken. Flights I flew as pilot in command are shown in one color, commercial flights in another.
-        </p>
-        -->
       </div>
 
       <div class="col-12">
@@ -103,41 +95,36 @@
     </div>
   </div>
 
-  <!-- JS libraries -->
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Leaflet -->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""
   ></script>
 
-  <!-- Your flight data -->
   <script src="js/flight-map-data.js"></script>
 
   <script>
-    // Create the map
     const map = L.map('flight-map', {
       scrollWheelZoom: true,
       worldCopyJump: true
     }).setView([30, 0], 2);
 
-    // Basemap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 10,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Bounds to fit all flights
     const allBounds = L.latLngBounds();
 
-    // Colors for each flight type
     const COLORS = {
       pic: '#00bcd4',
       commercial: '#ff9800'
     };
+
+    const WORLD_OFFSETS = [-360, 0, 360];
 
     function toRad(deg) {
       return deg * Math.PI / 180;
@@ -153,11 +140,15 @@
       return lng;
     }
 
-    /**
-     * Compute raw great-circle points.
-     * Longitudes are returned in the standard [-180, 180] range.
-     */
-    function greatCirclePoints(from, to, steps = 64) {
+    function shiftLatLng(latlng, lngOffset) {
+      return L.latLng(latlng.lat, latlng.lng + lngOffset);
+    }
+
+    function shiftSegment(segment, lngOffset) {
+      return segment.map(p => L.latLng(p.lat, p.lng + lngOffset));
+    }
+
+    function greatCirclePoints(from, to, steps = 96) {
       const lat1 = toRad(from.lat);
       const lon1 = toRad(from.lng);
       const lat2 = toRad(to.lat);
@@ -173,7 +164,10 @@
       const d = 2 * Math.asin(Math.sqrt(a));
 
       if (!d || isNaN(d)) {
-        return [from, to];
+        return [
+          { lat: from.lat, lng: from.lng },
+          { lat: to.lat, lng: to.lng }
+        ];
       }
 
       const points = [];
@@ -206,10 +200,6 @@
       return points;
     }
 
-    /**
-     * Unwrap longitudes so consecutive points remain continuous.
-     * Example: 179, -179 becomes 179, 181
-     */
     function unwrapLongitudes(points) {
       if (!points.length) return points;
 
@@ -231,10 +221,6 @@
       return unwrapped;
     }
 
-    /**
-     * Split a continuous unwrapped arc into segments that Leaflet can render
-     * without drawing a world-spanning line across the antimeridian.
-     */
     function splitAtDateLine(points) {
       if (points.length < 2) return [points];
 
@@ -248,7 +234,6 @@
         const prevNorm = normalizeLng(prev.lng);
         const currNorm = normalizeLng(curr.lng);
 
-        // If normalized longitudes jump a lot, we crossed the date line.
         if (Math.abs(currNorm - prevNorm) > 180 - 1e-6) {
           segments.push(current);
           current = [curr];
@@ -266,45 +251,21 @@
       );
     }
 
-    function buildGreatCircleSegments(from, to, steps = 64) {
+    function buildGreatCircleSegments(from, to, steps = 96) {
       const rawPoints = greatCirclePoints(from, to, steps);
       const unwrapped = unwrapLongitudes(rawPoints);
       return splitAtDateLine(unwrapped);
     }
 
-    // --- Draw flights ---
-
     if (Array.isArray(window.flightLegs) && window.flightLegs.length > 0) {
       window.flightLegs.forEach((leg) => {
         const from = L.latLng(leg.originLat, leg.originLng);
-        const to   = L.latLng(leg.destLat, leg.destLng);
+        const to = L.latLng(leg.destLat, leg.destLng);
 
         const type = leg.type === 'pic' ? 'pic' : 'commercial';
         const color = COLORS[type];
 
-        const arcSegments = buildGreatCircleSegments(from, to, 96);
-
-        arcSegments.forEach(segment => {
-          L.polyline(segment, {
-            color,
-            weight: 2.5,
-            opacity: 0.8
-          }).addTo(map).bindPopup(`
-            <strong>${leg.origin} → ${leg.dest}</strong><br/>
-            <small>${leg.originName || ''}${leg.originName ? ' – ' : ''}${leg.destName || ''}</small><br/>
-            ${leg.date ? `<small>${leg.date}</small><br/>` : ''}
-            <small>Type: ${type === 'pic' ? 'PIC / personal' : 'Commercial'}</small>
-            ${leg.notes ? `<br/>${leg.notes}` : ''}
-          `);
-        });
-
-        const circleOptions = {
-          radius: 3,
-          color,
-          weight: 1,
-          fillColor: color,
-          fillOpacity: 0.9
-        };
+        const arcSegments = buildGreatCircleSegments(from, to, 128);
 
         const popupHtml = `
           <strong>${leg.origin} → ${leg.dest}</strong><br/>
@@ -314,8 +275,32 @@
           ${leg.notes ? `<br/>${leg.notes}` : ''}
         `;
 
-        L.circleMarker(from, circleOptions).addTo(map).bindPopup(popupHtml);
-        L.circleMarker(to, circleOptions).addTo(map).bindPopup(popupHtml);
+        const circleOptions = {
+          radius: 3,
+          color,
+          weight: 1,
+          fillColor: color,
+          fillOpacity: 0.9
+        };
+
+        WORLD_OFFSETS.forEach((offset) => {
+          arcSegments.forEach(segment => {
+            L.polyline(shiftSegment(segment, offset), {
+              color,
+              weight: 2.5,
+              opacity: 0.8,
+              noClip: true
+            }).addTo(map).bindPopup(popupHtml);
+          });
+
+          L.circleMarker(shiftLatLng(from, offset), circleOptions)
+            .addTo(map)
+            .bindPopup(popupHtml);
+
+          L.circleMarker(shiftLatLng(to, offset), circleOptions)
+            .addTo(map)
+            .bindPopup(popupHtml);
+        });
 
         allBounds.extend(from);
         allBounds.extend(to);
@@ -323,6 +308,6 @@
 
       map.fitBounds(allBounds, { padding: [40, 40] });
     }
-</script>
+  </script>
 </body>
 </html>
