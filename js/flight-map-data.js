@@ -133,6 +133,51 @@ window.flightLegs = [
     type: "pic",
     notes: "N5601A"
   },
+  {
+    origin: "KOEO",
+    originName: "L O Simenstad Municipal Airport",
+    originLat: 45.3086,
+    originLng: -92.6903,
+
+    dest: "KSTP",
+    destName: "St. Peter Regional Airport",
+    destLat: 44.2661,
+    destLng: -93.4833,
+
+    date: "2026-03-20",
+    type: "pic",
+    notes: "N5601A"
+  },
+  {
+    origin: "KSTP",
+    originName: "St. Peter Regional Airport",
+    originLat: 44.2661,
+    originLng: -93.4833,
+
+    dest: "KANE",
+    destName: "Anoka County-Blaine Airport",
+    destLat: 45.2089,
+    destLng: -93.2167,
+
+    date: "2026-03-20",
+    type: "pic",
+    notes: "N5601A"
+  },
+  {
+    origin: "KANE",
+    originName: "Anoka County-Blaine Airport",
+    originLat: 45.2089,
+    originLng: -93.2167,
+
+    dest: "KOEO",
+    destName: "L O Simenstad Municipal Airport",
+    destLat: 45.3086,
+    destLng: -92.6903,
+
+    date: "2026-03-20",
+    type: "pic",
+    notes: "N5601A"
+  },
 
 
   // --- Commercial flights ---
@@ -211,7 +256,7 @@ window.flightLegs = [
     destLat: 37.6188,
     destLng: -122.3754,
 
-    date: "2016-07-10", // approx
+    date: "2016-07-10",
     type: "commercial"
   },
   {
@@ -225,7 +270,7 @@ window.flightLegs = [
     destLat: 44.8820,
     destLng: -93.2218,
 
-    date: "2016-07-20", // approx
+    date: "2016-07-20",
     type: "commercial"
   },
 
@@ -271,7 +316,7 @@ window.flightLegs = [
     destLat: 40.6418,
     destLng: -73.7810,
 
-    date: "2019-07-05", // approx
+    date: "2019-07-05",
     type: "commercial"
   },
   {
@@ -285,12 +330,11 @@ window.flightLegs = [
     destLat: 44.8820,
     destLng: -93.2218,
 
-    date: "2019-07-15", // approx
+    date: "2019-07-15",
     type: "commercial"
   },
 
   // Nov 2019 – Africa trip
-  // MSP → AMS → KGL → EBB
   {
     origin: "KMSP",
     originName: "Minneapolis–Saint Paul International Airport",
@@ -311,7 +355,7 @@ window.flightLegs = [
     originLat: 52.3081,
     originLng: 4.7642,
 
-    dest: "KGL",
+    dest: "KGGL",
     destName: "Kigali International Airport",
     destLat: -1.9686,
     destLng: 30.1395,
@@ -320,12 +364,12 @@ window.flightLegs = [
     type: "commercial"
   },
   {
-    origin: "KGL",
+    origin: "KGGL",
     originName: "Kigali International Airport",
     originLat: -1.9686,
     originLng: 30.1395,
 
-    dest: "EBB",
+    dest: "KEBB",
     destName: "Entebbe International Airport",
     destLat: 0.0424,
     destLng: 32.4435,
@@ -336,12 +380,12 @@ window.flightLegs = [
 
   // 17 Nov – Entebbe → Nairobi Intl
   {
-    origin: "EBB",
+    origin: "KEBB",
     originName: "Entebbe International Airport",
     originLat: 0.0424,
     originLng: 32.4435,
 
-    dest: "NBO",
+    dest: "KNBO",
     destName: "Jomo Kenyatta International Airport",
     destLat: -1.3337,
     destLng: 36.9271,
@@ -352,12 +396,12 @@ window.flightLegs = [
 
   // 18 & 22 Nov – Wilson ↔ Masai Mara strip
   {
-    origin: "WIL",
+    origin: "KWIL",
     originName: "Nairobi Wilson Airport",
     originLat: -1.3217,
     originLng: 36.8148,
 
-    dest: "MRE",
+    dest: "KMRE",
     destName: "Masai Mara – Mara Serena Airstrip",
     destLat: -1.4050,
     destLng: 35.0100,
@@ -366,12 +410,12 @@ window.flightLegs = [
     type: "commercial"
   },
   {
-    origin: "MRE",
+    origin: "KMRE",
     originName: "Masai Mara – Mara Serena Airstrip",
     originLat: -1.4050,
     originLng: 35.0100,
 
-    dest: "WIL",
+    dest: "KWIL",
     destName: "Nairobi Wilson Airport",
     destLat: -1.3217,
     destLng: 36.8148,
@@ -382,7 +426,7 @@ window.flightLegs = [
 
   // 23 Nov – Nairobi Intl → AMS → MSP
   {
-    origin: "NBO",
+    origin: "KNBO",
     originName: "Jomo Kenyatta International Airport",
     originLat: -1.3337,
     originLng: 36.9271,
@@ -500,6 +544,36 @@ window.flightLegs = [
     type: "commercial"
   },
 
+  // 6 Mar 2026 – MSP ↔ SFO
+  {
+    origin: "KMSP",
+    originName: "Minneapolis–Saint Paul International Airport",
+    originLat: 44.8820,
+    originLng: -93.2218,
+
+    dest: "KSFO",
+    destName: "San Francisco International Airport",
+    destLat: 37.6188,
+    destLng: -122.3754,
+
+    date: "2026-03-06",
+    type: "commercial"
+  },
+  {
+    origin: "KSFO",
+    originName: "San Francisco International Airport",
+    originLat: 37.6188,
+    originLng: -122.3754,
+
+    dest: "KMSP",
+    destName: "Minneapolis–Saint Paul International Airport",
+    destLat: 44.8820,
+    destLng: -93.2218,
+
+    date: "2026-03-08",
+    type: "commercial"
+  },
+
   // 6–10 Mar 2024 – Nashville
   {
     origin: "KMSP",
@@ -519,7 +593,7 @@ window.flightLegs = [
     origin: "KBNA",
     originName: "Nashville International Airport",
     originLat: 36.1317,
-    originLng: -86.6688,
+    destLng: -86.6688,
 
     dest: "KMSP",
     destName: "Minneapolis–Saint Paul International Airport",
@@ -721,7 +795,8 @@ window.flightLegs = [
     date: "2025-09-01",
     type: "commercial"
   },
-  // MSP → DFW (undated)
+
+  // Placeholder routes (undated)
   {
     origin: "KMSP",
     originName: "Minneapolis–Saint Paul International Airport",
@@ -736,8 +811,6 @@ window.flightLegs = [
     date: "2000-01-01",
     type: "commercial"
   },
-
-  // SAT → MSP (return on same “trip”, undated)
   {
     origin: "KSAT",
     originName: "San Antonio International Airport",
@@ -752,8 +825,6 @@ window.flightLegs = [
     date: "2000-01-01",
     type: "commercial"
   },
-
-  // MSP → SEA (undated)
   {
     origin: "KMSP",
     originName: "Minneapolis–Saint Paul International Airport",
@@ -768,8 +839,6 @@ window.flightLegs = [
     date: "2000-01-01",
     type: "commercial"
   },
-
-  // SEA → MSP (undated return)
   {
     origin: "KSEA",
     originName: "Seattle–Tacoma International Airport",
@@ -784,8 +853,6 @@ window.flightLegs = [
     date: "2000-01-01",
     type: "commercial"
   },
-
-  // MSP → RDU (undated)
   {
     origin: "KMSP",
     originName: "Minneapolis–Saint Paul International Airport",
@@ -800,8 +867,6 @@ window.flightLegs = [
     date: "2000-01-01",
     type: "commercial"
   },
-
-  // RDU → MSP (undated return)
   {
     origin: "KRDU",
     originName: "Raleigh–Durham International Airport",
@@ -816,8 +881,6 @@ window.flightLegs = [
     date: "2000-01-01",
     type: "commercial"
   },
-
-  // MSP → SJU (undated)
   {
     origin: "KMSP",
     originName: "Minneapolis–Saint Paul International Airport",
@@ -832,8 +895,6 @@ window.flightLegs = [
     date: "2000-01-01",
     type: "commercial"
   },
-
-  // SJU → MSP (undated return)
   {
     origin: "TJSJ",
     originName: "Luis Muñoz Marín International Airport (San Juan)",
@@ -848,9 +909,6 @@ window.flightLegs = [
     date: "2000-01-01",
     type: "commercial"
   },
-
-  // One-way with connection on 2026-01-01: MSP → DFW → RIC
-  // MSP → DTW on 2026-01-01
   {
     origin: "KMSP",
     originName: "Minneapolis–Saint Paul International Airport",
@@ -865,7 +923,6 @@ window.flightLegs = [
     date: "2026-01-01",
     type: "commercial"
   },
-  // DTW → RIC on 2026-01-01
   {
     origin: "KDTW",
     originName: "Detroit Metropolitan Wayne County Airport",
