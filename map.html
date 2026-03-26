@@ -21,7 +21,7 @@
   <!-- Fonts & Icons (reuse from main site) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100,900&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
@@ -36,7 +36,7 @@
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR97aM="
     crossorigin=""
   />
 
@@ -65,19 +65,55 @@
     .legend-swatch-commercial {
       background-color: #ff9800; /* Commercial flights */
     }
+    .dark-mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+    }
+    .dark-mode-toggle:hover {
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    body.dark-mode .dark-mode-toggle {
+      background: rgba(40, 40, 40, 0.9);
+      color: #fff;
+    }
+    body.dark-mode {
+      background-color: #1a1a1a;
+      color: #fff;
+    }
+    body.dark-mode .container {
+      background-color: #222;
+    }
+    body.dark-mode .title {
+      color: #fff;
+    }
+    body.dark-mode .text-light {
+      color: #ccc !important;
+    }
+    /* Dark mode map tiles */
+    .leaflet-container.dark-mode {
+      background-color: #1a1a1a;
+    }
   </style>
 </head>
 
 <body>
+  <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+  
   <div class="container py-5">
     <div class="row g-5">
       <div class="col-12">
         <h1 class="title pb-3 mb-3">Travel</h1>
-        <!--
-        <p class="text-light mb-4">
-          A visual log of flights I’ve taken. Flights I flew as pilot in command are shown in one color, commercial flights in another.
-        </p>
-        -->
       </div>
 
       <div class="col-12">
@@ -92,6 +128,9 @@
         <span>
           <span class="legend-swatch legend-swatch-commercial"></span>
           Commercial flights
+        </span>
+        <span class="ms-3" style="font-size: 0.8rem; opacity: 0.7;">
+          Line thickness = frequency
         </span>
       </div>
 
@@ -118,140 +157,205 @@
   <script src="js/flight-map-data.js"></script>
 
   <script>
+    // Dark mode toggle
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const mapContainer = document.getElementById('flight-map');
+      mapContainer.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+      updateMapStyle();
+    }
+
+    // Check for saved dark mode preference
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+      document.getElementById('flight-map').classList.add('dark-mode');
+    }
+
     // Create the map
     const map = L.map('flight-map', {
-        scrollWheelZoom: true,
-        worldCopyJump: true
+      scrollWheelZoom: true,
+      worldCopyJump: true
     }).setView([30, 0], 2);
 
     // Basemap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 10,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    const lightTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 10,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
 
-    // Bounds to fit all flights
-    const allBounds = L.latLngBounds();
+    const darkTiles = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_tonerLite/{z}/{x}/{y}{r}.png', {
+      maxZoom: 10,
+      attribution: '&copy; <a href="https://stadiamaps.com">Stadia Maps</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    function updateMapStyle() {
+      // Remove existing tile layer
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.TileLayer) {
+          map.removeLayer(layer);
+        }
+      });
+      
+      // Add appropriate tiles
+      if (document.body.classList.contains('dark-mode')) {
+        darkTiles.addTo(map);
+      } else {
+        lightTiles.addTo(map);
+      }
+    }
+
+    // Add initial tiles
+    lightTiles.addTo(map);
 
     // Colors for each flight type
     const COLORS = {
-        pic: '#00bcd4',        // flights you flew
-        commercial: '#ff9800'  // airline flights
+      pic: '#00bcd4',           // blue
+      commercial: '#ff9800'     // orange
     };
 
-    // --- Great-circle helpers ---
+    // --- Great-circle distance helpers ---
 
     function toRad(deg) {
-        return deg * Math.PI / 180;
+      return deg * Math.PI / 180;
     }
 
     function toDeg(rad) {
-        return rad * 180 / Math.PI;
+      return rad * 180 / Math.PI;
     }
 
     /**
-     * Generate points along a great-circle between two Leaflet LatLngs.
-     * steps controls how smooth the arc is (64 is usually plenty).
-     */
+    * Generate points along a great-circle arc between two LatLngs.
+    * steps controls how smooth the arc is (64 is usually plenty).
+    */
     function greatCirclePoints(from, to, steps = 64) {
-        const lat1 = toRad(from.lat);
-        const lon1 = toRad(from.lng);
-        const lat2 = toRad(to.lat);
-        const lon2 = toRad(to.lng);
+      const lat1 = toRad(from.lat);
+      const lon1 = toRad(from.lng);
+      const lat2 = toRad(to.lat);
+      const lon2 = toRad(to.lng);
 
-        // Haversine for central angle
-        const dLat = lat2 - lat1;
-        const dLon = lon2 - lon1;
-        const a =
+      // Haversine for central angle
+      const dLat = lat2 - lat1;
+      const dLon = lon2 - lon1;
+      const a =
         Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos(lat1) * Math.cos(lat2) *
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const d = 2 * Math.asin(Math.sqrt(a));
+      const d = 2 * Math.asin(Math.sqrt(a));
 
-        // If points are identical or extremely close, just return straight line
-        if (!d || isNaN(d)) {
+      // If points are identical or extremely close, just return straight line
+      if (!d || isNaN(d)) {
         return [from, to];
-        }
+      }
 
-        const points = [];
+      const points = [];
 
-        for (let i = 0; i <= steps; i++) {
+      for (let i = 0; i <= steps; i++) {
         const f = i / steps; // fraction along the route
 
         const A = Math.sin((1 - f) * d) / Math.sin(d);
         const B = Math.sin(f * d) / Math.sin(d);
 
         const x =
-            A * Math.cos(lat1) * Math.cos(lon1) +
-            B * Math.cos(lat2) * Math.cos(lon2);
+          A * Math.cos(lat1) * Math.cos(lon1) +
+          B * Math.cos(lat2) * Math.cos(lon2);
         const y =
-            A * Math.cos(lat1) * Math.sin(lon1) +
-            B * Math.cos(lat2) * Math.sin(lon2);
+          A * Math.cos(lat1) * Math.sin(lon1) +
+          B * Math.cos(lat2) * Math.sin(lon2);
         const z =
-            A * Math.sin(lat1) +
-            B * Math.sin(lat2);
+          A * Math.sin(lat1) +
+          B * Math.sin(lat2);
 
         const lat = Math.atan2(z, Math.sqrt(x * x + y * y));
         const lon = Math.atan2(y, x);
 
         points.push(L.latLng(toDeg(lat), toDeg(lon)));
-        }
+      }
 
-        return points;
+      return points;
     }
 
-    // --- Draw flights ---
+    // --- Route frequency tracking & heatmap coloring ---
 
+    // Count flight legs by route (normalized both directions)
+    const routeFrequency = {};
+    
     if (Array.isArray(window.flightLegs) && window.flightLegs.length > 0) {
-        window.flightLegs.forEach((leg) => {
+      window.flightLegs.forEach((leg) => {
+        const routeKey = [leg.origin, leg.dest].sort().join('-');
+        routeFrequency[routeKey] = (routeFrequency[routeKey] || 0) + 1;
+      });
+
+      // Get max frequency for color scaling
+      const maxFreq = Math.max(...Object.values(routeFrequency));
+      console.log(`Routes tracked: ${Object.keys(routeFrequency).length}, Max frequency: ${maxFreq}`);
+
+      // Bounds to fit all flights
+      const allBounds = L.latLngBounds();
+
+      // --- Draw flights ---
+
+      window.flightLegs.forEach((leg) => {
         const from = L.latLng(leg.originLat, leg.originLng);
-        const to   = L.latLng(leg.destLat, leg.destLng);
+        const to = L.latLng(leg.destLat, leg.destLng);
 
-        const type = leg.type === 'pic' ? 'pic' : 'commercial';
-        const color = COLORS[type];
+        // Get frequency for this route (direction-agnostic)
+        const routeKey = [leg.origin, leg.dest].sort().join('-');
+        const frequency = routeFrequency[routeKey] || 1;
 
-        // Compute great-circle arc instead of straight line
+        // Heatmap color: interpolate from light to dark based on frequency
+        // Normalize frequency to 0-1
+        const freqNorm = Math.min(frequency / maxFreq, 1);
+        
+        // Get base color
+        const baseColor = COLORS[leg.type === 'pic' ? 'pic' : 'commercial'];
+        
+        // Calculate opacity and weight based on frequency
+        const opacity = 0.3 + (freqNorm * 0.5);  // 0.3-0.8
+        const weight = 1.5 + (freqNorm * 2);      // 1.5-3.5px
+
+        // Compute great-circle arc
         const arcPoints = greatCirclePoints(from, to, 64);
 
-        // Draw the great-circle polyline
+        // Draw the polyline
         const polyline = L.polyline(arcPoints, {
-            color,
-            weight: 2.5,
-            opacity: 0.8
+          color: baseColor,
+          weight: weight,
+          opacity: opacity
         }).addTo(map);
 
         // Small markers at endpoints
         const circleOptions = {
-            radius: 3,
-            color,
-            weight: 1,
-            fillColor: color,
-            fillOpacity: 0.9
+          radius: 3,
+          color: baseColor,
+          weight: 1,
+          fillColor: baseColor,
+          fillOpacity: 0.9
         };
         const originMarker = L.circleMarker(from, circleOptions).addTo(map);
-        const destMarker   = L.circleMarker(to, circleOptions).addTo(map);
+        const destMarker = L.circleMarker(to, circleOptions).addTo(map);
 
         // Shared popup content
         const popupHtml = `
-            <strong>${leg.origin} → ${leg.dest}</strong><br/>
-            <small>${leg.originName || ''}${leg.originName ? ' – ' : ''}${leg.destName || ''}</small><br/>
-            ${leg.date ? `<small>${leg.date}</small><br/>` : ''}
-            <small>Type: ${type === 'pic' ? 'PIC / personal' : 'Commercial'}</small>
-            ${leg.notes ? `<br/>${leg.notes}` : ''}
+          <strong>${leg.origin} → ${leg.dest}</strong><br/>
+          <small>${leg.originName || ''} ${leg.originName ? ' – ' : ''}${leg.destName || ''}</small><br/>
+          <small>${leg.date ? `${leg.date}` : ''}</small><br/>
+          <small>Type: ${leg.type === 'pic' ? 'PIC / personal' : 'Commercial'}</small>
+          ${leg.notes ? `<br/>${leg.notes}` : ''}
         `;
 
         polyline.bindPopup(popupHtml);
         originMarker.bindPopup(popupHtml);
         destMarker.bindPopup(popupHtml);
 
-        // Bounds: endpoints are enough for fitting
+        // Expand bounds
         allBounds.extend(from);
         allBounds.extend(to);
-        });
+      });
 
-        // Fit map to all flights, with some padding
-        map.fitBounds(allBounds, { padding: [40, 40] });
+      // Fit map to all flights with padding
+      map.fitBounds(allBounds, { padding: [40, 40] });
     }
-</script>
+  </script>
 </body>
 </html>
