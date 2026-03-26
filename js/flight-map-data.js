@@ -134,6 +134,61 @@ window.flightLegs = [
     notes: "N5601A"
   },
 
+  // PIC multi-leg on 2026-03-20: OEO → STP → ANE → OEO
+  {
+    origin: "KOEO",
+    originLat: 45.310001,
+    originLng: -92.691902,
+
+    dest: "KSTP",
+    destLat: 44.934790,
+    destLng: -93.060036,
+
+    date: "2026-03-20",
+    type: "pic",
+    notes: "N5601A"
+  },
+  {
+    origin: "KSTP",
+    originLat: 44.934790,
+    originLng: -93.060036,
+
+    dest: "KANE",
+    destLat: 45.145000,
+    destLng: -93.211401,
+
+    date: "2026-03-20",
+    type: "pic",
+    notes: "N5601A"
+  },
+  {
+    origin: "KANE",
+    originLat: 45.145000,
+    originLng: -93.211401,
+
+    dest: "KOEO",
+    destLat: 45.310001,
+    destLng: -92.691902,
+
+    date: "2026-03-20",
+    type: "pic",
+    notes: "N5601A"
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // --- Commercial flights ---
 
@@ -879,6 +934,127 @@ window.flightLegs = [
 
     date: "2026-01-01",
     type: "commercial"
+  },
+  // Commercial round-trip: MSP → SFO on 2026-03-06, SFO → MSP on 2026-03-08
+  {
+    origin: "KMSP",
+    originName: "Minneapolis–Saint Paul International Airport",
+    originLat: 44.880081,
+    originLng: -93.221741,
+
+    dest: "KSFO",
+    destName: "San Francisco International Airport",
+    destLat: 37.619806,
+    destLng: -122.374821,
+
+    date: "2026-03-06",
+    type: "commercial"
+  },
+  {
+    origin: "KSFO",
+    originName: "San Francisco International Airport",
+    originLat: 37.619806,
+    originLng: -122.374821,
+
+    dest: "KMSP",
+    destName: "Minneapolis–Saint Paul International Airport",
+    destLat: 44.880081,
+    destLng: -93.221741,
+
+    date: "2026-03-08",
+    type: "commercial"
+  },
+
+  // 2026-04-02: MSP → HND
+  {
+    origin: "KMSP",
+    originName: "Minneapolis–Saint Paul International Airport",
+    originLat: 44.880081,
+    originLng: -93.221741,
+
+    dest: "RJTT",
+    destName: "Tokyo Haneda International Airport",
+    destLat: 35.549678,
+    destLng: 139.786958,
+
+    date: "2026-04-02",
+    type: "commercial"
+  },
+
+  // 2026-04-05: HND → CGK → SIN
+  {
+    origin: "RJTT",
+    originName: "Tokyo Haneda International Airport",
+    originLat: 35.549678,
+    originLng: 139.786958,
+
+    dest: "WIII",
+    destName: "Soekarno-Hatta International Airport",
+    destLat: -6.125570,
+    destLng: 106.655998,
+
+    date: "2026-04-05",
+    type: "commercial"
+  },
+  {
+    origin: "WIII",
+    originName: "Soekarno-Hatta International Airport",
+    originLat: -6.125570,
+    originLng: 106.655998,
+
+    dest: "WSSS",
+    destName: "Singapore Changi Airport",
+    destLat: 1.350190,
+    destLng: 103.994003,
+
+    date: "2026-04-05",
+    type: "commercial"
+  },
+
+  // 2026-04-12: SIN → ICN → SEA → MSP
+  {
+    origin: "WSSS",
+    originName: "Singapore Changi Airport",
+    originLat: 1.350190,
+    originLng: 103.994003,
+
+    dest: "RKSI",
+    destName: "Incheon International Airport",
+    destLat: 37.469101,
+    destLng: 126.450996,
+
+    date: "2026-04-12",
+    type: "commercial"
+  },
+  {
+    origin: "RKSI",
+    originName: "Incheon International Airport",
+    originLat: 37.469101,
+    originLng: 126.450996,
+
+    dest: "KSEA",
+    destName: "Seattle–Tacoma International Airport",
+    destLat: 47.447943,
+    destLng: -122.310276,
+
+    date: "2026-04-12",
+    type: "commercial"
+  },
+  {
+    origin: "KSEA",
+    originName: "Seattle–Tacoma International Airport",
+    originLat: 47.447943,
+    originLng: -122.310276,
+
+    dest: "KMSP",
+    destName: "Minneapolis–Saint Paul International Airport",
+    destLat: 44.880081,
+    destLng: -93.221741,
+
+    date: "2026-04-12",
+    type: "commercial"
   }
+
+
 
 ];
