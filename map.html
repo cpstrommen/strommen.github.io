@@ -120,14 +120,14 @@
   <script>
     // Create the map
     const map = L.map('flight-map', {
-        scrollWheelZoom: true,
-        worldCopyJump: true
+      scrollWheelZoom: true,
+      worldCopyJump: true
     }).setView([30, 0], 2);
 
     // Basemap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 10,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      maxZoom: 10,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
     // Bounds to fit all flights
@@ -135,122 +135,193 @@
 
     // Colors for each flight type
     const COLORS = {
-        pic: '#00bcd4',        // flights you flew
-        commercial: '#ff9800'  // airline flights
+      pic: '#00bcd4',
+      commercial: '#ff9800'
     };
 
-    // --- Great-circle helpers ---
-
     function toRad(deg) {
-        return deg * Math.PI / 180;
+      return deg * Math.PI / 180;
     }
 
     function toDeg(rad) {
-        return rad * 180 / Math.PI;
+      return rad * 180 / Math.PI;
+    }
+
+    function normalizeLng(lng) {
+      while (lng > 180) lng -= 360;
+      while (lng < -180) lng += 360;
+      return lng;
     }
 
     /**
-     * Generate points along a great-circle between two Leaflet LatLngs.
-     * steps controls how smooth the arc is (64 is usually plenty).
+     * Compute raw great-circle points.
+     * Longitudes are returned in the standard [-180, 180] range.
      */
     function greatCirclePoints(from, to, steps = 64) {
-        const lat1 = toRad(from.lat);
-        const lon1 = toRad(from.lng);
-        const lat2 = toRad(to.lat);
-        const lon2 = toRad(to.lng);
+      const lat1 = toRad(from.lat);
+      const lon1 = toRad(from.lng);
+      const lat2 = toRad(to.lat);
+      const lon2 = toRad(to.lng);
 
-        // Haversine for central angle
-        const dLat = lat2 - lat1;
-        const dLon = lon2 - lon1;
-        const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1) * Math.cos(lat2) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const d = 2 * Math.asin(Math.sqrt(a));
+      const dLat = lat2 - lat1;
+      const dLon = lon2 - lon1;
 
-        // If points are identical or extremely close, just return straight line
-        if (!d || isNaN(d)) {
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+
+      const d = 2 * Math.asin(Math.sqrt(a));
+
+      if (!d || isNaN(d)) {
         return [from, to];
-        }
+      }
 
-        const points = [];
+      const points = [];
 
-        for (let i = 0; i <= steps; i++) {
-        const f = i / steps; // fraction along the route
+      for (let i = 0; i <= steps; i++) {
+        const f = i / steps;
 
         const A = Math.sin((1 - f) * d) / Math.sin(d);
         const B = Math.sin(f * d) / Math.sin(d);
 
         const x =
-            A * Math.cos(lat1) * Math.cos(lon1) +
-            B * Math.cos(lat2) * Math.cos(lon2);
+          A * Math.cos(lat1) * Math.cos(lon1) +
+          B * Math.cos(lat2) * Math.cos(lon2);
         const y =
-            A * Math.cos(lat1) * Math.sin(lon1) +
-            B * Math.cos(lat2) * Math.sin(lon2);
+          A * Math.cos(lat1) * Math.sin(lon1) +
+          B * Math.cos(lat2) * Math.sin(lon2);
         const z =
-            A * Math.sin(lat1) +
-            B * Math.sin(lat2);
+          A * Math.sin(lat1) +
+          B * Math.sin(lat2);
 
         const lat = Math.atan2(z, Math.sqrt(x * x + y * y));
         const lon = Math.atan2(y, x);
 
-        points.push(L.latLng(toDeg(lat), toDeg(lon)));
-        }
+        points.push({
+          lat: toDeg(lat),
+          lng: toDeg(lon)
+        });
+      }
 
-        return points;
+      return points;
+    }
+
+    /**
+     * Unwrap longitudes so consecutive points remain continuous.
+     * Example: 179, -179 becomes 179, 181
+     */
+    function unwrapLongitudes(points) {
+      if (!points.length) return points;
+
+      const unwrapped = [{ ...points[0] }];
+
+      for (let i = 1; i < points.length; i++) {
+        let lng = points[i].lng;
+        const prevLng = unwrapped[i - 1].lng;
+
+        while (lng - prevLng > 180) lng -= 360;
+        while (lng - prevLng < -180) lng += 360;
+
+        unwrapped.push({
+          lat: points[i].lat,
+          lng
+        });
+      }
+
+      return unwrapped;
+    }
+
+    /**
+     * Split a continuous unwrapped arc into segments that Leaflet can render
+     * without drawing a world-spanning line across the antimeridian.
+     */
+    function splitAtDateLine(points) {
+      if (points.length < 2) return [points];
+
+      const segments = [];
+      let current = [points[0]];
+
+      for (let i = 1; i < points.length; i++) {
+        const prev = points[i - 1];
+        const curr = points[i];
+
+        const prevNorm = normalizeLng(prev.lng);
+        const currNorm = normalizeLng(curr.lng);
+
+        // If normalized longitudes jump a lot, we crossed the date line.
+        if (Math.abs(currNorm - prevNorm) > 180 - 1e-6) {
+          segments.push(current);
+          current = [curr];
+        } else {
+          current.push(curr);
+        }
+      }
+
+      if (current.length) {
+        segments.push(current);
+      }
+
+      return segments.map(segment =>
+        segment.map(p => L.latLng(p.lat, normalizeLng(p.lng)))
+      );
+    }
+
+    function buildGreatCircleSegments(from, to, steps = 64) {
+      const rawPoints = greatCirclePoints(from, to, steps);
+      const unwrapped = unwrapLongitudes(rawPoints);
+      return splitAtDateLine(unwrapped);
     }
 
     // --- Draw flights ---
 
     if (Array.isArray(window.flightLegs) && window.flightLegs.length > 0) {
-        window.flightLegs.forEach((leg) => {
+      window.flightLegs.forEach((leg) => {
         const from = L.latLng(leg.originLat, leg.originLng);
         const to   = L.latLng(leg.destLat, leg.destLng);
 
         const type = leg.type === 'pic' ? 'pic' : 'commercial';
         const color = COLORS[type];
 
-        // Compute great-circle arc instead of straight line
-        const arcPoints = greatCirclePoints(from, to, 64);
+        const arcSegments = buildGreatCircleSegments(from, to, 96);
 
-        // Draw the great-circle polyline
-        const polyline = L.polyline(arcPoints, {
+        arcSegments.forEach(segment => {
+          L.polyline(segment, {
             color,
             weight: 2.5,
             opacity: 0.8
-        }).addTo(map);
-
-        // Small markers at endpoints
-        const circleOptions = {
-            radius: 3,
-            color,
-            weight: 1,
-            fillColor: color,
-            fillOpacity: 0.9
-        };
-        const originMarker = L.circleMarker(from, circleOptions).addTo(map);
-        const destMarker   = L.circleMarker(to, circleOptions).addTo(map);
-
-        // Shared popup content
-        const popupHtml = `
+          }).addTo(map).bindPopup(`
             <strong>${leg.origin} → ${leg.dest}</strong><br/>
             <small>${leg.originName || ''}${leg.originName ? ' – ' : ''}${leg.destName || ''}</small><br/>
             ${leg.date ? `<small>${leg.date}</small><br/>` : ''}
             <small>Type: ${type === 'pic' ? 'PIC / personal' : 'Commercial'}</small>
             ${leg.notes ? `<br/>${leg.notes}` : ''}
-        `;
-
-        polyline.bindPopup(popupHtml);
-        originMarker.bindPopup(popupHtml);
-        destMarker.bindPopup(popupHtml);
-
-        // Bounds: endpoints are enough for fitting
-        allBounds.extend(from);
-        allBounds.extend(to);
+          `);
         });
 
-        // Fit map to all flights, with some padding
-        map.fitBounds(allBounds, { padding: [40, 40] });
+        const circleOptions = {
+          radius: 3,
+          color,
+          weight: 1,
+          fillColor: color,
+          fillOpacity: 0.9
+        };
+
+        const popupHtml = `
+          <strong>${leg.origin} → ${leg.dest}</strong><br/>
+          <small>${leg.originName || ''}${leg.originName ? ' – ' : ''}${leg.destName || ''}</small><br/>
+          ${leg.date ? `<small>${leg.date}</small><br/>` : ''}
+          <small>Type: ${type === 'pic' ? 'PIC / personal' : 'Commercial'}</small>
+          ${leg.notes ? `<br/>${leg.notes}` : ''}
+        `;
+
+        L.circleMarker(from, circleOptions).addTo(map).bindPopup(popupHtml);
+        L.circleMarker(to, circleOptions).addTo(map).bindPopup(popupHtml);
+
+        allBounds.extend(from);
+        allBounds.extend(to);
+      });
+
+      map.fitBounds(allBounds, { padding: [40, 40] });
     }
 </script>
 </body>
