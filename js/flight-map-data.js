@@ -1053,6 +1053,66 @@ window.flightLegs = [
 
     date: "2026-04-12",
     type: "commercial"
+  },
+  // 2026-08-15: MSP → IAD
+  {
+    origin: "KMSP",
+    originName: "Minneapolis–Saint Paul International Airport",
+    originLat: 44.882000,
+    originLng: -93.221802,
+
+    dest: "KIAD",
+    destName: "Washington Dulles International Airport",
+    destLat: 38.944500,
+    destLng: -77.455803,
+
+    date: "2026-08-15",
+    type: "commercial"
+  },
+  // 2026-08-16: IAD → SCE
+  {
+    origin: "KIAD",
+    originName: "Washington Dulles International Airport",
+    originLat: 38.944500,
+    originLng: -77.455803,
+
+    dest: "KUNV",
+    destName: "State College Regional Airport",
+    destLat: 40.849300,
+    destLng: -77.848701,
+
+    date: "2026-08-16",
+    type: "commercial"
+  },
+  // 2026-08-19: SCE → ORD
+  {
+    origin: "KUNV",
+    originName: "State College Regional Airport",
+    originLat: 40.849300,
+    originLng: -77.848701,
+
+    dest: "KORD",
+    destName: "O'Hare International Airport",
+    destLat: 41.978600,
+    destLng: -87.904800,
+
+    date: "2026-08-19",
+    type: "commercial"
+  },
+  // 2026-08-19: ORD → MSP
+  {
+    origin: "KORD",
+    originName: "O'Hare International Airport",
+    originLat: 41.978600,
+    originLng: -87.904800,
+
+    dest: "KMSP",
+    destName: "Minneapolis–Saint Paul International Airport",
+    destLat: 44.882000,
+    destLng: -93.221802,
+
+    date: "2026-08-19",
+    type: "commercial"
   }
 
 
