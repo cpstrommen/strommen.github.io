@@ -1113,7 +1113,144 @@ window.flightLegs = [
 
     date: "2026-08-19",
     type: "commercial"
-  }
+  },
+  // 2019-09-14: OEO → EAU → OEO
+  {
+    origin: "KOEO",
+    originLat: 45.310001,
+    originLng: -92.691902,
+
+    dest: "KEAU",
+    destLat: 44.865799,
+    destLng: -91.484299,
+
+    date: "2019-09-14",
+    type: "pic",
+    notes: "N149AC"
+  },
+  {
+    origin: "KEAU",
+    originLat: 44.865799,
+    originLng: -91.484299,
+
+    dest: "KOEO",
+    destLat: 45.310001,
+    destLng: -92.691902,
+
+    date: "2019-09-14",
+    type: "pic",
+    notes: "N149AC"
+  },
+
+  // 2019-10-20: OEO → SSQ → OEO
+  {
+    origin: "KOEO",
+    originLat: 45.310001,
+    originLng: -92.691902,
+
+    dest: "KSSQ",
+    destLat: 45.731000,
+    destLng: -91.921000,
+
+    date: "2019-10-20",
+    type: "pic",
+    notes: "N149AC"
+  },
+  {
+    origin: "KSSQ",
+    originLat: 45.731000,
+    originLng: -91.921000,
+
+    dest: "KOEO",
+    destLat: 45.310001,
+    destLng: -92.691902,
+
+    date: "2019-10-20",
+    type: "pic",
+    notes: "N149AC"
+  },
+
+  // 2026-04-19: OEO → RCX → EAU → OEO
+  {
+    origin: "KOEO",
+    originLat: 45.310001,
+    originLng: -92.691902,
+
+    dest: "KRCX",
+    destLat: 45.496799,
+    destLng: -91.000504,
+
+    date: "2026-04-19",
+    type: "pic",
+    notes: "N5601A"
+  },
+  {
+    origin: "KRCX",
+    originLat: 45.496799,
+    originLng: -91.000504,
+
+    dest: "KEAU",
+    destLat: 44.865799,
+    destLng: -91.484299,
+
+    date: "2026-04-19",
+    type: "pic",
+    notes: "N5601A"
+  },
+  {
+    origin: "KEAU",
+    originLat: 44.865799,
+    originLng: -91.484299,
+
+    dest: "KOEO",
+    destLat: 45.310001,
+    destLng: -92.691902,
+
+    date: "2026-04-19",
+    type: "pic",
+    notes: "N5601A"
+  },
+
+  // 2026-05-01: OEO → SUW → RZN → OEO
+  {
+    origin: "KOEO",
+    originLat: 45.310001,
+    originLng: -92.691902,
+
+    dest: "KSUW",
+    destLat: 46.688612,
+    destLng: -92.095041,
+
+    date: "2026-05-01",
+    type: "pic",
+    notes: "N5601A"
+  },
+  {
+    origin: "KSUW",
+    originLat: 46.688612,
+    originLng: -92.095041,
+
+    dest: "KRZN",
+    destLat: 45.822701,
+    destLng: -92.372498,
+
+    date: "2026-05-01",
+    type: "pic",
+    notes: "N5601A"
+  },
+  {
+    origin: "KRZN",
+    originLat: 45.822701,
+    originLng: -92.372498,
+
+    dest: "KOEO",
+    destLat: 45.310001,
+    destLng: -92.691902,
+
+    date: "2026-05-01",
+    type: "pic",
+    notes: "N5601A"
+  }  
 
 
 
