@@ -4,15 +4,15 @@
   <meta charset="utf-8">
   <title>Travel – Christian Strommen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Interactive map of flights flown by Christian Strommen.">
-  <meta name="keywords" content="Christian Strommen, flight map, aviation, routes">
+  <meta name="description" content="Interactive map of travel routes by Christian Strommen.">
+  <meta name="keywords" content="Christian Strommen, travel map, aviation, driving, train routes">
 
   <link href="assets/favicon.png" rel="icon">
   <link href="assets/favicon.png" rel="shortcut icon">
   <link rel="shortcut icon" type="image/png" href="assets/favicon.png"/>
 
-  <meta property="og:title" content="Flight Map – Christian Strommen">
-  <meta property="og:description" content="Interactive map of personal and commercial flights.">
+  <meta property="og:title" content="Travel Map – Christian Strommen">
+  <meta property="og:description" content="Interactive map of flights, driving routes, and train routes.">
   <meta property="og:image" content="assets/favicon.png">
   <meta property="og:url" content="https://strommen.ch/map.html">
 
@@ -36,9 +36,17 @@
   <style>
     #flight-map {
       width: 100%;
-      height: 600px;
+      height: min(76vh, 820px);
+      min-height: 680px;
       border-radius: 0.75rem;
       overflow: hidden;
+    }
+
+    @media (max-width: 767.98px) {
+      #flight-map {
+        height: 72vh;
+        min-height: 520px;
+      }
     }
 
     .flight-map-legend {
@@ -62,15 +70,23 @@
     .legend-swatch-commercial {
       background-color: #ff9800;
     }
+
+    .legend-swatch-driving {
+      background-color: #4caf50;
+    }
+
+    .legend-swatch-train {
+      background-color: #8e7cc3;
+    }
   </style>
 </head>
 
 <body>
-  <div class="container py-5">
-    <div class="row g-5">
-      <div class="col-12">
-        <h1 class="title pb-3 mb-3">Travel</h1>
-      </div>
+	  <div class="container py-5">
+	    <div class="row gx-5 gy-3">
+	      <div class="col-12">
+	        <h1 class="title pb-2 mb-0">Travel</h1>
+	      </div>
 
       <div class="col-12">
         <div id="flight-map" class="shadow"></div>
@@ -81,17 +97,25 @@
           <span class="legend-swatch legend-swatch-pic"></span>
           General Aviation flights
         </span>
-        <span>
+        <span class="me-3">
           <span class="legend-swatch legend-swatch-commercial"></span>
           Commercial flights
         </span>
+        <span class="me-3">
+          <span class="legend-swatch legend-swatch-driving"></span>
+          Driving routes
+        </span>
+        <span>
+          <span class="legend-swatch legend-swatch-train"></span>
+          Train routes
+        </span>
       </div>
 
-      <div class="col-12 mt-5">
-        <div class="text-light text-center">
-          <p class="m-0" href="index.html"><b>strommen.ch</b></p>
-        </div>
-      </div>
+	      <div class="col-12 mt-5">
+	        <div class="text-light text-center">
+	          <p class="m-0"><a href="index.html"><b>strommen.ch</b></a></p>
+	        </div>
+	      </div>
     </div>
   </div>
 
@@ -104,210 +128,6 @@
     crossorigin=""
   ></script>
 
-  <script src="js/flight-map-data.js"></script>
-
-  <script>
-    const map = L.map('flight-map', {
-      scrollWheelZoom: true,
-      worldCopyJump: true
-    }).setView([30, 0], 2);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 10,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    const allBounds = L.latLngBounds();
-
-    const COLORS = {
-      pic: '#00bcd4',
-      commercial: '#ff9800'
-    };
-
-    const WORLD_OFFSETS = [-360, 0, 360];
-
-    function toRad(deg) {
-      return deg * Math.PI / 180;
-    }
-
-    function toDeg(rad) {
-      return rad * 180 / Math.PI;
-    }
-
-    function normalizeLng(lng) {
-      while (lng > 180) lng -= 360;
-      while (lng < -180) lng += 360;
-      return lng;
-    }
-
-    function shiftLatLng(latlng, lngOffset) {
-      return L.latLng(latlng.lat, latlng.lng + lngOffset);
-    }
-
-    function shiftSegment(segment, lngOffset) {
-      return segment.map(p => L.latLng(p.lat, p.lng + lngOffset));
-    }
-
-    function greatCirclePoints(from, to, steps = 96) {
-      const lat1 = toRad(from.lat);
-      const lon1 = toRad(from.lng);
-      const lat2 = toRad(to.lat);
-      const lon2 = toRad(to.lng);
-
-      const dLat = lat2 - lat1;
-      const dLon = lon2 - lon1;
-
-      const a =
-        Math.sin(dLat / 2) ** 2 +
-        Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
-
-      const d = 2 * Math.asin(Math.sqrt(a));
-
-      if (!d || isNaN(d)) {
-        return [
-          { lat: from.lat, lng: from.lng },
-          { lat: to.lat, lng: to.lng }
-        ];
-      }
-
-      const points = [];
-
-      for (let i = 0; i <= steps; i++) {
-        const f = i / steps;
-
-        const A = Math.sin((1 - f) * d) / Math.sin(d);
-        const B = Math.sin(f * d) / Math.sin(d);
-
-        const x =
-          A * Math.cos(lat1) * Math.cos(lon1) +
-          B * Math.cos(lat2) * Math.cos(lon2);
-        const y =
-          A * Math.cos(lat1) * Math.sin(lon1) +
-          B * Math.cos(lat2) * Math.sin(lon2);
-        const z =
-          A * Math.sin(lat1) +
-          B * Math.sin(lat2);
-
-        const lat = Math.atan2(z, Math.sqrt(x * x + y * y));
-        const lon = Math.atan2(y, x);
-
-        points.push({
-          lat: toDeg(lat),
-          lng: toDeg(lon)
-        });
-      }
-
-      return points;
-    }
-
-    function unwrapLongitudes(points) {
-      if (!points.length) return points;
-
-      const unwrapped = [{ ...points[0] }];
-
-      for (let i = 1; i < points.length; i++) {
-        let lng = points[i].lng;
-        const prevLng = unwrapped[i - 1].lng;
-
-        while (lng - prevLng > 180) lng -= 360;
-        while (lng - prevLng < -180) lng += 360;
-
-        unwrapped.push({
-          lat: points[i].lat,
-          lng
-        });
-      }
-
-      return unwrapped;
-    }
-
-    function splitAtDateLine(points) {
-      if (points.length < 2) return [points];
-
-      const segments = [];
-      let current = [points[0]];
-
-      for (let i = 1; i < points.length; i++) {
-        const prev = points[i - 1];
-        const curr = points[i];
-
-        const prevNorm = normalizeLng(prev.lng);
-        const currNorm = normalizeLng(curr.lng);
-
-        if (Math.abs(currNorm - prevNorm) > 180 - 1e-6) {
-          segments.push(current);
-          current = [curr];
-        } else {
-          current.push(curr);
-        }
-      }
-
-      if (current.length) {
-        segments.push(current);
-      }
-
-      return segments.map(segment =>
-        segment.map(p => L.latLng(p.lat, normalizeLng(p.lng)))
-      );
-    }
-
-    function buildGreatCircleSegments(from, to, steps = 96) {
-      const rawPoints = greatCirclePoints(from, to, steps);
-      const unwrapped = unwrapLongitudes(rawPoints);
-      return splitAtDateLine(unwrapped);
-    }
-
-    if (Array.isArray(window.flightLegs) && window.flightLegs.length > 0) {
-      window.flightLegs.forEach((leg) => {
-        const from = L.latLng(leg.originLat, leg.originLng);
-        const to = L.latLng(leg.destLat, leg.destLng);
-
-        const type = leg.type === 'pic' ? 'pic' : 'commercial';
-        const color = COLORS[type];
-
-        const arcSegments = buildGreatCircleSegments(from, to, 128);
-
-        const popupHtml = `
-          <strong>${leg.origin} → ${leg.dest}</strong><br/>
-          <small>${leg.originName || ''}${leg.originName ? ' – ' : ''}${leg.destName || ''}</small><br/>
-          ${leg.date ? `<small>${leg.date}</small><br/>` : ''}
-          <small>Type: ${type === 'pic' ? 'PIC / personal' : 'Commercial'}</small>
-          ${leg.notes ? `<br/>${leg.notes}` : ''}
-        `;
-
-        const circleOptions = {
-          radius: 3,
-          color,
-          weight: 1,
-          fillColor: color,
-          fillOpacity: 0.9
-        };
-
-        WORLD_OFFSETS.forEach((offset) => {
-          arcSegments.forEach(segment => {
-            L.polyline(shiftSegment(segment, offset), {
-              color,
-              weight: 2.5,
-              opacity: 0.8,
-              noClip: true
-            }).addTo(map).bindPopup(popupHtml);
-          });
-
-          L.circleMarker(shiftLatLng(from, offset), circleOptions)
-            .addTo(map)
-            .bindPopup(popupHtml);
-
-          L.circleMarker(shiftLatLng(to, offset), circleOptions)
-            .addTo(map)
-            .bindPopup(popupHtml);
-        });
-
-        allBounds.extend(from);
-        allBounds.extend(to);
-      });
-
-      map.fitBounds(allBounds, { padding: [40, 40] });
-    }
-  </script>
+  <script src="js/travel-map.js"></script>
 </body>
 </html>
