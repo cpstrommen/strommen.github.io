@@ -60,7 +60,7 @@ pre code {
   display: block;
   border-radius: 5px;
   overflow-x: auto;
-  font-family: 'PT Mono', monospace;
+  font-family: 'Geologica', sans-serif;
 }
 
 blockquote {
@@ -316,4 +316,20 @@ blockquote {
 .testimonial-carousel .owl-dot.active {
   background: var(--dark);
   background-color: var(--dark);
+}
+
+a.btn.btn-secondary.btn-square.rounded-circle,
+a.btn.btn-secondary.btn-square.rounded-circle:hover,
+a.btn.btn-secondary.btn-square.rounded-circle:focus,
+a.btn.btn-secondary.btn-square.rounded-circle:active,
+a.btn.btn-secondary.btn-square.rounded-circle:focus-visible {
+  color: var(--light) !important;
+  background-color: var(--primary) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+a.btn.btn-secondary.btn-square.rounded-circle {
+  border-width: 0 !important;
 }
