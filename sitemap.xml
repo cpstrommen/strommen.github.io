@@ -4,14 +4,21 @@
   <!-- Home -->
   <url>
     <loc>https://strommen.ch/</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>weekly</changefreq>
   </url>
 
   <!-- About page -->
   <url>
     <loc>https://strommen.ch/about.html</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Travel map -->
+  <url>
+    <loc>https://strommen.ch/map.html</loc>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 
@@ -36,9 +43,14 @@
 
   <url>
     <loc>https://strommen.ch/articles/plcd-article.html</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://strommen.ch/articles/IoTHackday.html</loc>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>yearly</changefreq>
   </url>
 
 </urlset>
-

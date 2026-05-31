@@ -85,18 +85,21 @@ blockquote {
   width: 40px;
   height: 40px;
   background-color: var(--primary);
+  border-color: var(--primary);
 }
 
 .btn-sm-square {
   width: 30px;
   height: 30px;
   background-color: var(--primary);
+  border-color: var(--primary);
 }
 
 .btn-lg-square {
   width: 50px;
   height: 50px;
   background-color: var(--primary);
+  border-color: var(--primary);
 }
 
 .btn-square,
@@ -106,6 +109,51 @@ blockquote {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.btn.btn-secondary.btn-square,
+.btn.btn-secondary.btn-sm-square,
+.btn.btn-secondary.btn-lg-square {
+  color: var(--light);
+  background-color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: none;
+}
+
+.btn.btn-secondary.btn-square:hover,
+.btn.btn-secondary.btn-square:focus,
+.btn.btn-secondary.btn-square:active,
+.btn.btn-secondary.btn-square:focus-visible,
+.btn.btn-secondary.btn-sm-square:hover,
+.btn.btn-secondary.btn-sm-square:focus,
+.btn.btn-secondary.btn-sm-square:active,
+.btn.btn-secondary.btn-sm-square:focus-visible,
+.btn.btn-secondary.btn-lg-square:hover,
+.btn.btn-secondary.btn-lg-square:focus,
+.btn.btn-secondary.btn-lg-square:active,
+.btn.btn-secondary.btn-lg-square:focus-visible {
+  color: var(--light);
+  background-color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: none !important;
+  outline: none;
+}
+
+.btn-square:focus,
+.btn-square:active,
+.btn-square:focus-visible,
+.btn-square:hover,
+.btn-sm-square:focus,
+.btn-sm-square:active,
+.btn-sm-square:focus-visible,
+.btn-sm-square:hover,
+.btn-lg-square:focus,
+.btn-lg-square:active,
+.btn-lg-square:focus-visible,
+.btn-lg-square:hover {
+  border-color: var(--primary);
+  box-shadow: none !important;
+  outline: none;
 }
 
 .btn.btn-primary {
