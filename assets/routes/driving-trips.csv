@@ -32,3 +32,7 @@ trip_id,date,stops,notes
 31,1/1/23,KRZN|KMSP,Siren MN 2023
 32,1/1/14,KMSP|KSDF,NASP Nationals 2014
 33,1/1/14,KSDF|KMSP,NASP Nationals 2014
+34,7/2/26,KMSP|KBJI,July trip to Bemidji MN
+35,7/5/26,KBJI|KMSP,Return from Bemidji MN
+36,7/10/26,KMSP|KMSN,July trip to Madison WI
+37,7/12/26,KMSN|KMSP,Return from Madison WI
