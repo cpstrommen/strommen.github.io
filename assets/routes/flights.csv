@@ -68,6 +68,8 @@ date,type,origin,destination,notes
 2026-04-12,commercial,WSSS,RKSI,
 2026-04-12,commercial,RKSI,KSEA,
 2026-04-12,commercial,KSEA,KMSP,
+2026-07-26,commercial,KMSP,KSNA,
+2026-07-28,commercial,KSNA,KMSP,
 2026-08-15,commercial,KMSP,KIAD,
 2026-08-16,commercial,KIAD,KUNV,
 2026-08-19,commercial,KUNV,KORD,
