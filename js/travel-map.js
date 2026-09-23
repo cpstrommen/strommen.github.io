@@ -1,5 +1,6 @@
 (function () {
   const DATA_FILES = {
+    basemap: 'assets/map/ne_50m_countries.geojson',
     airports: 'assets/routes/airports.csv',
     flights: 'assets/routes/flights.csv',
     drivingTrips: 'assets/routes/driving-trips.csv',
@@ -19,14 +20,11 @@
 
   const map = L.map('flight-map', {
     scrollWheelZoom: true,
-    worldCopyJump: true
+    maxBounds: [[-90, -180], [90, 180]],
+    maxBoundsViscosity: 1
   }).setView([30, 0], 2);
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    maxZoom: 19,
-    subdomains: 'abcd',
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-  }).addTo(map);
+  map.attributionControl.addAttribution('Natural Earth');
 
   const allBounds = L.latLngBounds();
 
@@ -250,6 +248,18 @@
 
   function airportLatLng(airport) {
     return L.latLng(airport.lat, airport.lng);
+  }
+
+  function renderBasemap(countries) {
+    L.geoJSON(countries, {
+      interactive: false,
+      style: {
+        color: '#737980',
+        weight: 0.65,
+        fillColor: '#b8bcc1',
+        fillOpacity: 1
+      }
+    }).addTo(map).bringToBack();
   }
 
   function markerOptions(color) {
@@ -515,6 +525,7 @@
   async function initTravelMap() {
     try {
       const [
+        countries,
         airportRows,
         flights,
         drivingTrips,
@@ -522,6 +533,7 @@
         drivingRoutes,
         trainRoutes
       ] = await Promise.all([
+        loadJson(DATA_FILES.basemap),
         loadCsv(DATA_FILES.airports),
         loadCsv(DATA_FILES.flights),
         loadCsv(DATA_FILES.drivingTrips),
@@ -532,6 +544,7 @@
 
       const airports = airportMap(airportRows);
 
+      renderBasemap(countries);
       renderFlights(flights, airports);
       renderDrivingTrips(drivingTrips, airports, drivingRoutes);
       renderTrainTrips(trainTrips, airports, trainRoutes);
