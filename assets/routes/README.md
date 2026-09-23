@@ -36,7 +36,7 @@ python3 scripts/preview-map.py
 
 ## File Guide
 
-- `airports.csv`: airport lookup table. Use ICAO codes when possible, for example `KMSP`, `EGLL`, `RJTT`.
+- `airports.csv`: coordinate lookup table. Use ICAO codes for airports and descriptive codes for non-airport driving waypoints.
 - `flights.csv`: one flight leg per row. Add `date,type,origin,destination,notes`.
 - `driving-trips.csv`: one driving trip per row. Add ordered stops like `KMSP|KORD|KDTW`.
 - `train-trips.csv`: one train trip per row. Add ordered stops and an OSM relation ID in `route_id`.
@@ -74,7 +74,8 @@ trip_id,date,stops,notes
 Rules:
 
 - `trip_id` only needs to be unique within `driving-trips.csv`.
-- `stops` are airport codes separated by `|`.
+- `stops` are location codes from `airports.csv`, separated by `|`.
+- Use ICAO codes for airport stops. For a city-center stop, add a descriptive code and coordinates to `airports.csv`.
 - The route is generated between each adjacent stop in order.
 - The generator uses OSRM to create shortest road-following geometry.
 
@@ -170,9 +171,7 @@ Underlined airports are Delta, United, or American hubs where a future connectio
 | 12 | ZGGG | Guangzhou Baiyun International Airport | CN | 76.4M |
 | 14 | LFPG | Charles de Gaulle International Airport | FR | 70.3M |
 | 16 | ZBAA | Beijing Capital International Airport | CN | 67.4M |
-| 18 | LEMD | Adolfo Suarez Madrid-Barajas Airport | ES | 66.2M |
 | 20 | VTBS | Suvarnabhumi Airport | TH | 62.2M |
-| 21 | EDDF | Frankfurt Airport | DE | 61.6M |
 | 22 | ZGSZ | Shenzhen Bao'an International Airport | CN | 61.5M |
 | 23 | <u>KCLT</u> | <u>Charlotte Douglas International Airport</u> | US | 58.8M |
 | 24 | <u>KLAS</u> | <u>Harry Reid International Airport</u> | US | 58.4M |

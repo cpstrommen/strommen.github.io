@@ -74,6 +74,12 @@ date,type,origin,destination,notes
 2026-08-16,commercial,KIAD,KUNV,
 2026-08-19,commercial,KUNV,KORD,
 2026-08-19,commercial,KORD,KMSP,
+2026-09-18,commercial,KMSP,EIDW,Europe trip
+2026-09-18,commercial,EIDW,EHAM,Europe trip
+2026-09-24,commercial,EDDF,LEST,Europe trip
+2026-09-27,commercial,LEST,LEMD,Europe trip
+2026-09-27,commercial,LEMD,KPHL,Europe trip
+2026-09-27,commercial,KPHL,KMSP,Europe trip
 2019-09-14,pic,KOEO,KEAU,N149AC
 2019-09-14,pic,KEAU,KOEO,N149AC
 2019-10-20,pic,KOEO,KSSQ,N149AC
@@ -88,3 +94,5 @@ date,type,origin,destination,notes
 2026-05-15,pic,KEAU,KOEO,N5601A
 2026-08-01,pic,KOEO,KUBE,7ECA
 2026-08-01,pic,KUBE,KOEO,7ECA
+2026-08-31,pic,KOEO,KUBE,N149AC
+2026-08-31,pic,KUBE,KOEO,N149AC
