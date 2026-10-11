@@ -1,4 +1,4 @@
-trip_id,date,stops,notes
+trip_id,date,stops,notes,times
 1,3/1/22,KMSP|KMSN|KBNA|KVLD|KJAX|KFLL,Spring Break 2022
 2,3/7/22,KFLL|KJAX|KVLD|KBNA|KSTL|KMSP,Spring Break 2022
 3,3/1/23,KMSP|KSTL|KBNA|KVLD|KJAX|KFLL,Spring Break 2023
@@ -20,8 +20,8 @@ trip_id,date,stops,notes
 19,6/28/26,KMCI|KMSP,Drove to see Austria vs Algeria in the World Cup
 20,1/1/19,KMSP|KCKC,2019 family trip to Grand Marais MN
 21,1/1/19,KCKC|KMSP,2019 family trip to Grand Marais MN
-22,1/1/20,KMSP|KBJI,Recurring 8x per year trips to Bemidji MN
-23,1/1/20,KBJI|KMSP,Recurring 8x per year trips to Bemidji MN
+22,1/1/20,KMSP|KBJI,Recurring 8x per year trips to Bemidji MN,8
+23,1/1/20,KBJI|KMSP,Recurring 8x per year trips to Bemidji MN,8
 24,1/1/23,KMSP|KGFK,Sioux vs Gophers game 2023
 25,1/1/23,KGFK|KMSP,Sioux vs Gophers game 2023
 26,1/1/25,KMSP|KGFK,Sioux vs Gophers game 2025

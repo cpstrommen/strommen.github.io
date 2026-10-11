@@ -1,6 +1,8 @@
 (function () {
   const DATA_FILES = {
     basemap: 'assets/map/ne_50m_countries.geojson',
+    stateBorders: 'assets/map/ne_50m_us_state_borders.geojson',
+    lakes: 'assets/map/ne_50m_lakes.geojson',
     airports: 'assets/routes/airports.csv',
     flights: 'assets/routes/flights.csv',
     drivingTrips: 'assets/routes/driving-trips.csv',
@@ -250,7 +252,7 @@
     return L.latLng(airport.lat, airport.lng);
   }
 
-  function renderBasemap(countries) {
+  function renderBasemap(countries, stateBorders, lakes) {
     L.geoJSON(countries, {
       interactive: false,
       style: {
@@ -260,6 +262,40 @@
         fillOpacity: 1
       }
     }).addTo(map).bringToBack();
+
+    L.geoJSON(stateBorders, {
+      interactive: false,
+      style: {
+        color: '#686e75',
+        weight: 0.9,
+        opacity: 0.8,
+        dashArray: '2 4',
+        lineCap: 'round'
+      }
+    }).addTo(map);
+
+    L.geoJSON(lakes, {
+      interactive: false,
+      style: {
+        color: '#737980',
+        weight: 0.65,
+        fillColor: '#30343a',
+        fillOpacity: 1
+      }
+    }).addTo(map);
+  }
+
+  function routePairKey(from, to) {
+    return [from, to].sort().join(':');
+  }
+
+  function occurrenceCount(record) {
+    const count = Number(record.times || 1);
+    return Number.isFinite(count) && count > 0 ? count : 1;
+  }
+
+  function routeWeight(baseWeight, count) {
+    return baseWeight + Math.min(4.5, Math.log2(Math.max(count, 1)) * 1.2);
   }
 
   function markerOptions(color) {
@@ -282,6 +318,8 @@
   }
 
   function renderFlights(flights, airports) {
+    const routeGroups = new Map();
+
     flights.forEach(flight => {
       const origin = airports.get(flight.origin);
       const destination = airports.get(flight.destination);
@@ -292,23 +330,49 @@
       }
 
       const type = flight.type === 'pic' ? 'pic' : 'commercial';
+      const key = `${type}:${routePairKey(flight.origin, flight.destination)}`;
+
+      if (!routeGroups.has(key)) {
+        routeGroups.set(key, {
+          type,
+          origin,
+          destination,
+          flights: [],
+          count: 0
+        });
+      }
+
+      const group = routeGroups.get(key);
+      group.flights.push(flight);
+      group.count += occurrenceCount(flight);
+    });
+
+    routeGroups.forEach(group => {
+      const { type, origin, destination, flights, count } = group;
       const color = COLORS[type];
       const from = airportLatLng(origin);
       const to = airportLatLng(destination);
       const arcSegments = buildGreatCircleSegments(from, to, 128);
       const popupHtml = [
-        `<strong>${escapeHtml(origin.code)} &rarr; ${escapeHtml(destination.code)}</strong>`,
+        `<strong>${escapeHtml(origin.code)} &harr; ${escapeHtml(destination.code)}</strong>`,
         `<small>${escapeHtml(origin.name)}${origin.name && destination.name ? ' &ndash; ' : ''}${escapeHtml(destination.name)}</small>`,
-        flight.date ? `<small>${escapeHtml(flight.date)}</small>` : '',
         `<small>Type: ${type === 'pic' ? 'PIC / personal' : 'Commercial'}</small>`,
-        flight.notes ? escapeHtml(flight.notes) : ''
+        `<small>${count} ${count === 1 ? 'flight' : 'flights'}</small>`,
+        ...flights.map(flight => {
+          const details = [
+            flight.date,
+            `${flight.origin} -> ${flight.destination}`,
+            flight.notes
+          ].filter(Boolean).map(escapeHtml).join(' &middot; ');
+          return details ? `<small>${details}</small>` : '';
+        })
       ].filter(Boolean).join('<br/>');
 
       WORLD_OFFSETS.forEach(offset => {
         arcSegments.forEach(segment => {
           L.polyline(shiftSegment(segment, offset), {
             color,
-            weight: 2.5,
+            weight: routeWeight(2.5, count),
             opacity: 0.8,
             noClip: true
           }).addTo(map).bindPopup(popupHtml);
@@ -350,7 +414,7 @@
     });
   }
 
-  function addRouteGeometry(feature, color, popupHtml) {
+  function addRouteGeometry(feature, color, popupHtml, weight = 3.5) {
     const lineStrings = routeLineStrings(feature.geometry);
 
     if (!lineStrings.length) {
@@ -363,7 +427,7 @@
       WORLD_OFFSETS.forEach(offset => {
         L.polyline(shiftSegment(latLngs, offset), {
           color,
-          weight: 3.5,
+          weight,
           opacity: 0.85,
           noClip: true
         }).addTo(map).bindPopup(popupHtml);
@@ -433,6 +497,23 @@
     ].filter(Boolean).join('<br/>');
   }
 
+  function drivingPopupHtml(group) {
+    return [
+      `<strong>Driving: ${escapeHtml(group.from)} &harr; ${escapeHtml(group.to)}</strong>`,
+      `<small>${group.count} ${group.count === 1 ? 'drive' : 'drives'}</small>`,
+      ...group.entries.map(entry => {
+        const times = occurrenceCount(entry.trip);
+        const details = [
+          entry.trip.date,
+          entry.stops.join(' -> '),
+          times > 1 ? `${times} times` : '',
+          entry.trip.notes
+        ].filter(Boolean).map(escapeHtml).join(' &middot; ');
+        return details ? `<small>${details}</small>` : '';
+      })
+    ].filter(Boolean).join('<br/>');
+  }
+
   function findDrivingFeature(routeIndex, trip, from, to, legIndex) {
     const candidates = [
       `trip-leg:${trip.trip_id}:${legIndex}`,
@@ -451,6 +532,7 @@
 
   function renderDrivingTrips(trips, airports, routes) {
     const routeIndex = indexRouteFeatures(routes);
+    const routeGroups = new Map();
 
     trips.forEach(trip => {
       if (!trip.trip_id && !trip.stops) return;
@@ -473,11 +555,30 @@
           continue;
         }
 
-        const popupHtml = routePopupHtml('Driving', trip, stops, from, to);
-        if (addRouteGeometry(feature, COLORS.driving, popupHtml)) {
-          addAirportMarker(airports.get(from), COLORS.driving, popupHtml);
-          addAirportMarker(airports.get(to), COLORS.driving, popupHtml);
+        const key = routePairKey(from, to);
+        if (!routeGroups.has(key)) {
+          routeGroups.set(key, {
+            from,
+            to,
+            feature,
+            entries: [],
+            count: 0
+          });
         }
+
+        const group = routeGroups.get(key);
+        group.entries.push({ trip, stops });
+        group.count += occurrenceCount(trip);
+      }
+    });
+
+    routeGroups.forEach(group => {
+      const popupHtml = drivingPopupHtml(group);
+      const weight = routeWeight(3.5, group.count);
+
+      if (addRouteGeometry(group.feature, COLORS.driving, popupHtml, weight)) {
+        addAirportMarker(airports.get(group.from), COLORS.driving, popupHtml);
+        addAirportMarker(airports.get(group.to), COLORS.driving, popupHtml);
       }
     });
   }
@@ -526,6 +627,8 @@
     try {
       const [
         countries,
+        stateBorders,
+        lakes,
         airportRows,
         flights,
         drivingTrips,
@@ -534,6 +637,8 @@
         trainRoutes
       ] = await Promise.all([
         loadJson(DATA_FILES.basemap),
+        loadJson(DATA_FILES.stateBorders),
+        loadJson(DATA_FILES.lakes),
         loadCsv(DATA_FILES.airports),
         loadCsv(DATA_FILES.flights),
         loadCsv(DATA_FILES.drivingTrips),
@@ -544,7 +649,7 @@
 
       const airports = airportMap(airportRows);
 
-      renderBasemap(countries);
+      renderBasemap(countries, stateBorders, lakes);
       renderFlights(flights, airports);
       renderDrivingTrips(drivingTrips, airports, drivingRoutes);
       renderTrainTrips(trainTrips, airports, trainRoutes);

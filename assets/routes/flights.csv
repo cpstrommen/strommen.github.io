@@ -80,6 +80,8 @@ date,type,origin,destination,notes
 2026-09-27,commercial,LEST,LEMD,Europe trip
 2026-09-27,commercial,LEMD,KPHL,Europe trip
 2026-09-27,commercial,KPHL,KMSP,Europe trip
+2026-10-09,commercial,KMSP,KIAD,
+2026-10-12,commercial,KIAD,KMSP,
 2019-09-14,pic,KOEO,KEAU,N149AC
 2019-09-14,pic,KEAU,KOEO,N149AC
 2019-10-20,pic,KOEO,KSSQ,N149AC

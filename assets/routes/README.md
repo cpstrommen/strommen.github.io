@@ -62,13 +62,16 @@ Valid `type` values:
 
 After editing only `flights.csv`, you do not need to regenerate GeoJSON. Just preview the map.
 
+Flight legs with the same endpoints and type are combined visually. Their line
+gets thicker as more matching rows are added, regardless of travel direction.
+
 ## Driving Trips
 
 Add one row per trip:
 
 ```csv
-trip_id,date,stops,notes
-18,2026-06-01,KMSP|KORD|KDTW,Road trip
+trip_id,date,stops,notes,times
+18,2026-06-01,KMSP|KORD|KDTW,Road trip,
 ```
 
 Rules:
@@ -76,6 +79,7 @@ Rules:
 - `trip_id` only needs to be unique within `driving-trips.csv`.
 - `stops` are location codes from `airports.csv`, separated by `|`.
 - Use ICAO codes for airport stops. For a city-center stop, add a descriptive code and coordinates to `airports.csv`.
+- `times` is optional. Set it when one row represents the same trip multiple times; route thickness uses this value.
 - The route is generated between each adjacent stop in order.
 - The generator uses OSRM to create shortest road-following geometry.
 
@@ -84,6 +88,10 @@ After editing, run:
 ```sh
 python3 scripts/generate-route-geojson.py --mode driving
 ```
+
+Driving legs with the same endpoints are combined visually regardless of travel
+direction. Their line thickness uses the number of matching legs, including the
+optional `times` value.
 
 ## Train Trips
 
