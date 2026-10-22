@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Bird Hunting, a restored JavaScript game by Christian Strommen.">
+    <meta name="robots" content="noindex">
+    <title>Bird Hunting - Christian Strommen</title>
+    <link rel="icon" href="/favicon.ico?v=2">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png?v=2">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png?v=2">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png?v=2">
+    <link rel="stylesheet" href="../styles/fonts.css">
+    <link rel="stylesheet" href="../styles/all.min.css">
+    <link rel="stylesheet" href="bird-hunting.css">
+</head>
+<body>
+    <main class="game-page">
+        <header class="game-header">
+            <div>
+                <h1 class="game-title">Bird Hunting</h1>
+                <p class="game-subtitle">Christian Strommen, 2011</p>
+            </div>
+        </header>
+
+        <section class="game-stage" aria-label="Bird Hunting game">
+            <canvas
+                id="bird-hunting-canvas"
+                width="800"
+                height="800"
+                data-logical-width="400"
+                data-logical-height="400"
+                tabindex="0"
+                aria-label="Move the pointer to aim and click or tap to shoot the flying bird"
+            ></canvas>
+
+            <div class="game-toolbar" aria-label="Game controls">
+                <div class="weapon-selector" role="group" aria-label="Weapon">
+                    <button id="select-shotgun" class="control-button weapon-button" type="button" aria-pressed="true" aria-keyshortcuts="E">
+                        <i class="fas fa-bullseye" aria-hidden="true"></i>
+                        <span>Shotgun</span>
+                    </button>
+                    <button id="select-rifle" class="control-button weapon-button" type="button" aria-pressed="false" aria-keyshortcuts="E">
+                        <i class="fas fa-crosshairs" aria-hidden="true"></i>
+                        <span>Rifle</span>
+                    </button>
+                </div>
+                <button id="reload-weapon" class="control-button reload-button" type="button" title="Reload" aria-label="Reload" aria-keyshortcuts="R">
+                    <i class="fas fa-redo-alt" aria-hidden="true"></i>
+                </button>
+            </div>
+        </section>
+
+        <p id="game-note" class="game-note">Original game logic and artwork preserved from the Khan Academy JavaScript editor.</p>
+    </main>
+
+    <script>
+        window.gameLoadError = null;
+        window.addEventListener("error", function (event) {
+            window.gameLoadError = event.error || new Error(event.message);
+        });
+    </script>
+    <script src="khan-canvas-runtime.js"></script>
+    <script src="BirdHunting.js"></script>
+    <script src="bird-hunting-page.js"></script>
+</body>
+</html>

@@ -160,9 +160,10 @@ if (shotgun === true){
     rect(mouseX-32,mouseY+56,78,3,70);
     rect(mouseX,mouseY+28,3,30,70);
     textSize(12);
-    if (keyIsPressed === true && loaded < 6 && extra > 0){
-        loaded = 6;
-        extra = extra - 6;
+    if (keyIsPressed === true && (key === "r" || key === "R") && loaded < 6 && extra > 0){
+        var roundsToLoad = Math.min(6 - loaded, extra);
+        loaded = loaded + roundsToLoad;
+        extra = extra - roundsToLoad;
     }
     
     
@@ -230,5 +231,12 @@ if (shotgun === true){
         x = 0;
         y = random(20, 380);
         speed = random(speed_low,speed_high);
+    }
+};
+
+var keyPressed = function() {
+    if (key === "e" || key === "E") {
+        rifle = !rifle;
+        shotgun = !rifle;
     }
 };

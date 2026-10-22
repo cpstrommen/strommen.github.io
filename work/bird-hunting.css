@@ -1,0 +1,171 @@
+:root {
+    --page-background: #151719;
+    --panel-background: #23272b;
+    --panel-border: #4a5056;
+    --text-primary: #f2f2f2;
+    --text-muted: #aeb4ba;
+    --control-background: #30353a;
+    --control-hover: #3c4349;
+    --control-active: #d4a84f;
+    --control-active-text: #17191b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    background: var(--page-background);
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    background: var(--page-background);
+    color: var(--text-primary);
+    font-family: "Geologica", sans-serif;
+}
+
+button {
+    font: inherit;
+}
+
+.game-page {
+    width: min(100% - 32px, 760px);
+    margin: 0 auto;
+    padding: 36px 0 28px;
+}
+
+.game-header {
+    margin-bottom: 18px;
+}
+
+.game-title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 650;
+    line-height: 1.1;
+}
+
+.game-subtitle {
+    margin: 6px 0 0;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.game-stage {
+    overflow: hidden;
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    background: var(--panel-background);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+}
+
+#bird-hunting-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    outline: none;
+    touch-action: none;
+}
+
+#bird-hunting-canvas:focus-visible {
+    box-shadow: inset 0 0 0 3px var(--control-active);
+}
+
+.game-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px;
+    border-top: 1px solid var(--panel-border);
+}
+
+.weapon-selector {
+    display: inline-flex;
+    min-width: 0;
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+}
+
+.control-button {
+    min-height: 42px;
+    border: 0;
+    background: var(--control-background);
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.weapon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 124px;
+    padding: 9px 14px;
+}
+
+.weapon-button + .weapon-button {
+    border-left: 1px solid var(--panel-border);
+}
+
+.control-button:hover {
+    background: var(--control-hover);
+}
+
+.control-button:focus-visible {
+    position: relative;
+    z-index: 1;
+    outline: 2px solid var(--text-primary);
+    outline-offset: 2px;
+}
+
+.weapon-button.is-active {
+    background: var(--control-active);
+    color: var(--control-active-text);
+}
+
+.reload-button {
+    display: inline-grid;
+    width: 42px;
+    min-width: 42px;
+    place-items: center;
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+}
+
+.game-note {
+    margin: 15px 0 0;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.game-note.is-error {
+    color: #ef8f87;
+}
+
+@media (max-width: 520px) {
+    .game-page {
+        width: min(100% - 20px, 760px);
+        padding-top: 20px;
+    }
+
+    .game-title {
+        font-size: 1.5rem;
+    }
+
+    .weapon-selector {
+        display: grid;
+        flex: 1;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .weapon-button {
+        min-width: 0;
+        padding-inline: 10px;
+    }
+}
