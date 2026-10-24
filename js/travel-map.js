@@ -289,15 +289,6 @@
     return [from, to].sort().join(':');
   }
 
-  function occurrenceCount(record) {
-    const count = Number(record.times || 1);
-    return Number.isFinite(count) && count > 0 ? count : 1;
-  }
-
-  function routeWeight(baseWeight, count) {
-    return baseWeight + Math.min(4.5, Math.log2(Math.max(count, 1)) * 1.2);
-  }
-
   function markerOptions(color) {
     return {
       radius: 3,
@@ -318,7 +309,7 @@
   }
 
   function renderFlights(flights, airports) {
-    const routeGroups = new Map();
+    const renderedRoutes = new Set();
 
     flights.forEach(flight => {
       const origin = airports.get(flight.origin);
@@ -331,24 +322,9 @@
 
       const type = flight.type === 'pic' ? 'pic' : 'commercial';
       const key = `${type}:${routePairKey(flight.origin, flight.destination)}`;
+      if (renderedRoutes.has(key)) return;
+      renderedRoutes.add(key);
 
-      if (!routeGroups.has(key)) {
-        routeGroups.set(key, {
-          type,
-          origin,
-          destination,
-          flights: [],
-          count: 0
-        });
-      }
-
-      const group = routeGroups.get(key);
-      group.flights.push(flight);
-      group.count += occurrenceCount(flight);
-    });
-
-    routeGroups.forEach(group => {
-      const { type, origin, destination, flights, count } = group;
       const color = COLORS[type];
       const from = airportLatLng(origin);
       const to = airportLatLng(destination);
@@ -356,23 +332,14 @@
       const popupHtml = [
         `<strong>${escapeHtml(origin.code)} &harr; ${escapeHtml(destination.code)}</strong>`,
         `<small>${escapeHtml(origin.name)}${origin.name && destination.name ? ' &ndash; ' : ''}${escapeHtml(destination.name)}</small>`,
-        `<small>Type: ${type === 'pic' ? 'PIC / personal' : 'Commercial'}</small>`,
-        `<small>${count} ${count === 1 ? 'flight' : 'flights'}</small>`,
-        ...flights.map(flight => {
-          const details = [
-            flight.date,
-            `${flight.origin} -> ${flight.destination}`,
-            flight.notes
-          ].filter(Boolean).map(escapeHtml).join(' &middot; ');
-          return details ? `<small>${details}</small>` : '';
-        })
+        `<small>${type === 'pic' ? 'General aviation' : 'Commercial flight'}</small>`
       ].filter(Boolean).join('<br/>');
 
       WORLD_OFFSETS.forEach(offset => {
         arcSegments.forEach(segment => {
           L.polyline(shiftSegment(segment, offset), {
             color,
-            weight: routeWeight(2.5, count),
+            weight: 2.5,
             opacity: 0.8,
             noClip: true
           }).addTo(map).bindPopup(popupHtml);
@@ -445,9 +412,7 @@
     const keys = [];
 
     if (props.route_id) keys.push(`route:${props.route_id}`);
-    if (props.trip_id && props.leg_index) keys.push(`trip-leg:${props.trip_id}:${props.leg_index}`);
-    if (props.trip_id && from && to) keys.push(`trip-pair:${props.trip_id}:${from}:${to}`);
-    if (from && to) keys.push(`pair:${from}:${to}`);
+    if (from && to) keys.push(`pair:${routePairKey(from, to)}`);
 
     return keys;
   }
@@ -488,54 +453,19 @@
     return stops;
   }
 
-  function routePopupHtml(label, trip, stops, from, to) {
+  function routePopupHtml(label, stops, from, to) {
     return [
       `<strong>${escapeHtml(label)}: ${escapeHtml(from || stops[0])} &rarr; ${escapeHtml(to || stops[stops.length - 1])}</strong>`,
-      `<small>${stops.map(escapeHtml).join(' &rarr; ')}</small>`,
-      trip.date ? `<small>${escapeHtml(trip.date)}</small>` : '',
-      trip.notes ? escapeHtml(trip.notes) : ''
+      `<small>${stops.map(escapeHtml).join(' &rarr; ')}</small>`
     ].filter(Boolean).join('<br/>');
-  }
-
-  function drivingPopupHtml(group) {
-    return [
-      `<strong>Driving: ${escapeHtml(group.from)} &harr; ${escapeHtml(group.to)}</strong>`,
-      `<small>${group.count} ${group.count === 1 ? 'drive' : 'drives'}</small>`,
-      ...group.entries.map(entry => {
-        const times = occurrenceCount(entry.trip);
-        const details = [
-          entry.trip.date,
-          entry.stops.join(' -> '),
-          times > 1 ? `${times} times` : '',
-          entry.trip.notes
-        ].filter(Boolean).map(escapeHtml).join(' &middot; ');
-        return details ? `<small>${details}</small>` : '';
-      })
-    ].filter(Boolean).join('<br/>');
-  }
-
-  function findDrivingFeature(routeIndex, trip, from, to, legIndex) {
-    const candidates = [
-      `trip-leg:${trip.trip_id}:${legIndex}`,
-      `trip-pair:${trip.trip_id}:${from}:${to}`,
-      `route:${trip.trip_id}:${legIndex}`,
-      `route:${trip.trip_id}-${legIndex}`,
-      `pair:${from}:${to}`
-    ];
-
-    for (const key of candidates) {
-      if (routeIndex.has(key)) return routeIndex.get(key);
-    }
-
-    return null;
   }
 
   function renderDrivingTrips(trips, airports, routes) {
     const routeIndex = indexRouteFeatures(routes);
-    const routeGroups = new Map();
+    const renderedRoutes = new Set();
 
     trips.forEach(trip => {
-      if (!trip.trip_id && !trip.stops) return;
+      if (!trip.stops) return;
 
       const stops = validTripAirports(trip, airports);
       if (!stops) return;
@@ -543,42 +473,25 @@
       for (let i = 0; i < stops.length - 1; i++) {
         const from = stops[i];
         const to = stops[i + 1];
-        const feature = findDrivingFeature(routeIndex, trip, from, to, i + 1);
+        const key = routePairKey(from, to);
+        if (renderedRoutes.has(key)) continue;
+
+        const feature = routeIndex.get(`pair:${key}`);
 
         if (!feature) {
           console.warn('Skipping driving leg with missing route geometry', {
-            trip_id: trip.trip_id,
-            leg_index: i + 1,
             from,
             to
           });
           continue;
         }
 
-        const key = routePairKey(from, to);
-        if (!routeGroups.has(key)) {
-          routeGroups.set(key, {
-            from,
-            to,
-            feature,
-            entries: [],
-            count: 0
-          });
+        renderedRoutes.add(key);
+        const popupHtml = routePopupHtml('Driving', [from, to]);
+        if (addRouteGeometry(feature, COLORS.driving, popupHtml)) {
+          addAirportMarker(airports.get(from), COLORS.driving, popupHtml);
+          addAirportMarker(airports.get(to), COLORS.driving, popupHtml);
         }
-
-        const group = routeGroups.get(key);
-        group.entries.push({ trip, stops });
-        group.count += occurrenceCount(trip);
-      }
-    });
-
-    routeGroups.forEach(group => {
-      const popupHtml = drivingPopupHtml(group);
-      const weight = routeWeight(3.5, group.count);
-
-      if (addRouteGeometry(group.feature, COLORS.driving, popupHtml, weight)) {
-        addAirportMarker(airports.get(group.from), COLORS.driving, popupHtml);
-        addAirportMarker(airports.get(group.to), COLORS.driving, popupHtml);
       }
     });
   }
@@ -594,23 +507,20 @@
 
       const routeId = trip.route_id;
       if (!routeId) {
-        console.warn('Skipping train trip with missing route_id relation ID', {
-          trip_id: trip.trip_id
-        });
+        console.warn('Skipping train route with missing route_id relation ID', trip);
         return;
       }
 
       const feature = routeIndex.get(`route:${routeId}`);
 
       if (!feature) {
-        console.warn('Skipping train trip with missing route geometry', {
-          trip_id: trip.trip_id,
+        console.warn('Skipping train route with missing geometry', {
           route_id: routeId
         });
         return;
       }
 
-      const popupHtml = routePopupHtml('Train', trip, stops);
+      const popupHtml = routePopupHtml('Train', stops);
       if (addRouteGeometry(feature, COLORS.train, popupHtml)) {
         stops.forEach(stop => addAirportMarker(airports.get(stop), COLORS.train, popupHtml));
       }

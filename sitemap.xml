@@ -4,21 +4,21 @@
   <!-- Home -->
   <url>
     <loc>https://strommen.ch/</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>weekly</changefreq>
   </url>
 
   <!-- About page -->
   <url>
     <loc>https://strommen.ch/about.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 
   <!-- Travel map -->
   <url>
     <loc>https://strommen.ch/map.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 
@@ -42,14 +42,33 @@
   </url>
 
   <url>
+    <loc>https://strommen.ch/articles/social-clubs/social-clubs-article.pdf</loc>
+    <lastmod>2026-09-27</lastmod>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <url>
     <loc>https://strommen.ch/articles/plcd-article.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>yearly</changefreq>
   </url>
 
   <url>
     <loc>https://strommen.ch/articles/IoTHackday.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <!-- Project archives -->
+  <url>
+    <loc>https://strommen.ch/work/bird-hunting/</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>yearly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://strommen.ch/work/strommen-services/</loc>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>yearly</changefreq>
   </url>
 

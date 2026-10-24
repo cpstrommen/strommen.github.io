@@ -5,7 +5,7 @@ This repository contains the source for my personal website, [strommen.ch](https
 ## Site structure
 
 - `index.html` and `about.html` contain the main portfolio pages.
-- `map.html` renders flight, driving, and train history from the CSV and GeoJSON files in `assets/routes/`.
+- `map.html` renders a privacy-reduced summary of flight, driving, and train routes from the CSV and GeoJSON files in `assets/routes/`.
 - `articles/` contains published writing and supporting documents.
 - `work/` contains older project material and browser-based project archives.
 - `scripts/` contains local utilities for updating travel-map data and previewing the site.

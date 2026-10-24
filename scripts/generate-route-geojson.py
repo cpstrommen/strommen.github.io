@@ -34,7 +34,10 @@ def write_geojson(path: Path, features: list[dict]) -> None:
         "type": "FeatureCollection",
         "features": features,
     }
-    path.write_text(json.dumps(collection, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    path.write_text(
+        json.dumps(collection, ensure_ascii=False, separators=(",", ":")) + "\n",
+        encoding="utf-8",
+    )
 
 
 def load_airports(path: Path) -> dict[str, dict]:
@@ -104,9 +107,9 @@ def generate_driving_features(
     pause: float,
 ) -> list[dict]:
     features = []
+    seen_pairs: set[tuple[str, str]] = set()
 
     for trip in trips:
-        trip_id = trip.get("trip_id", "")
         stops = split_stops(trip.get("stops", ""))
 
         if len(stops) < 2:
@@ -115,9 +118,14 @@ def generate_driving_features(
 
         missing = [stop for stop in stops if stop not in airports]
         if missing:
-            raise ValueError(f"Driving trip {trip_id or trip!r} has unknown airport code(s): {', '.join(missing)}")
+            raise ValueError(f"Driving route {trip!r} has unknown location code(s): {', '.join(missing)}")
 
-        for index, (from_code, to_code) in enumerate(zip(stops, stops[1:]), start=1):
+        for from_code, to_code in zip(stops, stops[1:]):
+            route_pair = tuple(sorted((from_code, to_code)))
+            if route_pair in seen_pairs:
+                continue
+            seen_pairs.add(route_pair)
+
             data = request_json(
                 osrm_route_url(osrm_base_url, airports[from_code], airports[to_code]),
                 timeout,
@@ -126,7 +134,7 @@ def generate_driving_features(
             )
             routes = data.get("routes") or []
             if not routes:
-                raise RuntimeError(f"OSRM returned no route for driving leg {trip_id}:{index} {from_code}->{to_code}")
+                raise RuntimeError(f"OSRM returned no route for driving leg {from_code}->{to_code}")
 
             route = routes[0]
             features.append({
@@ -134,19 +142,12 @@ def generate_driving_features(
                 "geometry": route["geometry"],
                 "properties": {
                     "mode": "driving",
-                    "trip_id": trip_id,
-                    "route_id": f"{trip_id}-{index}" if trip_id else f"{from_code}-{to_code}",
-                    "leg_index": index,
-                    "from": from_code,
-                    "to": to_code,
-                    "date": trip.get("date", ""),
-                    "notes": trip.get("notes", ""),
-                    "distance_m": route.get("distance"),
-                    "duration_s": route.get("duration"),
+                    "from": route_pair[0],
+                    "to": route_pair[1],
                     "source": "OSRM",
                 },
             })
-            print(f"Driving {trip_id or '(no trip_id)'} leg {index}: {from_code} -> {to_code}")
+            print(f"Driving route: {from_code} -> {to_code}")
             if pause:
                 time.sleep(pause)
 
@@ -181,9 +182,9 @@ def generate_train_features(
     pause: float,
 ) -> list[dict]:
     features = []
+    seen_routes: set[tuple[str, str, str]] = set()
 
     for trip in trips:
-        trip_id = trip.get("trip_id", "")
         stops = split_stops(trip.get("stops", ""))
         ids = relation_ids(trip.get("route_id", ""))
 
@@ -192,10 +193,15 @@ def generate_train_features(
             continue
 
         if not ids:
-            raise ValueError(f"Train trip {trip_id or trip!r} is missing route_id relation ID(s)")
+            raise ValueError(f"Train route {trip!r} is missing route_id relation ID(s)")
+
+        route_id = "|".join(ids)
+        route_key = (stops[0], stops[-1], route_id)
+        if route_key in seen_routes:
+            continue
+        seen_routes.add(route_key)
 
         line_strings = []
-        relation_names = []
         for relation_id in ids:
             data = request_json(
                 train_route_url(public_transport_base_url, relation_id),
@@ -204,13 +210,12 @@ def generate_train_features(
                 pause,
             )
             line_strings.extend(line_strings_from_geojson(data.get("geojson", {})))
-            relation_names.append(data.get("name") or relation_id)
-            print(f"Train {trip_id or '(no trip_id)'} relation {relation_id}: {data.get('name') or 'unnamed'}")
+            print(f"Train relation {relation_id}: {data.get('name') or 'unnamed'}")
             if pause:
                 time.sleep(pause)
 
         if not line_strings:
-            raise RuntimeError(f"No rail LineString geometry found for train trip {trip_id or trip!r}")
+            raise RuntimeError(f"No rail LineString geometry found for train route {route_id}")
 
         features.append({
             "type": "Feature",
@@ -220,14 +225,10 @@ def generate_train_features(
             },
             "properties": {
                 "mode": "train",
-                "trip_id": trip_id,
-                "route_id": trip.get("route_id", "") or trip_id,
+                "route_id": route_id,
                 "from": stops[0],
                 "to": stops[-1],
-                "date": trip.get("date", ""),
-                "notes": trip.get("notes", ""),
-                "relation_names": " | ".join(relation_names),
-                "source": "OSM public_transport_geojson",
+                "source": "OpenStreetMap",
             },
         })
 
