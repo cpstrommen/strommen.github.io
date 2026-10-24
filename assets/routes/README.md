@@ -2,7 +2,7 @@
 
 The travel map loads the CSV and GeoJSON files in this directory. These are intentionally public, privacy-reduced datasets: they describe unique airport or city-level routes, not individual trips.
 
-Do not add dates, timestamps, trip notes, vehicle or aircraft registrations, recurrence counts, home addresses, accommodation locations, or other precise personal locations to these files.
+Do not add dates, timestamps, trip notes, vehicle or aircraft registrations, home addresses, accommodation locations, or other precise personal locations to these files. Aggregate route counts are intentionally public and control line thickness.
 
 ## Update Workflow
 
@@ -28,12 +28,12 @@ python3 scripts/preview-map.py
 `flights.csv` contains one unique, direction-independent route per flight category:
 
 ```csv
-type,origin,destination
-commercial,KMSP,KORD
-pic,KEAU,KOEO
+type,origin,destination,count
+commercial,KMSP,KORD,3
+pic,KEAU,KOEO,2
 ```
 
-Valid `type` values are `commercial` and `pic`. The latter is displayed as general aviation. A route that has been traveled more than once still appears only once.
+Valid `type` values are `commercial` and `pic`. The latter is displayed as general aviation. A route appears once, and `count` is the total number of logged flights in either direction. Larger counts produce thicker lines.
 
 Flight routes use great-circle geometry generated in the browser, so editing only `flights.csv` does not require running the GeoJSON generator.
 
@@ -42,11 +42,11 @@ Flight routes use great-circle geometry generated in the browser, so editing onl
 `driving-trips.csv` contains one unique, direction-independent road segment per row:
 
 ```csv
-stops
-KMSP|KORD
+stops,count
+KMSP|KORD,4
 ```
 
-Use exactly two location codes separated by `|`. The generator uses OSRM to create road-following geometry and deduplicates reversed or repeated endpoint pairs.
+Use exactly two location codes separated by `|`. `count` is the total number of drives in either direction. The generator uses OSRM to create road-following geometry and deduplicates reversed or repeated endpoint pairs.
 
 To regenerate only driving routes:
 
@@ -59,11 +59,11 @@ python3 scripts/generate-route-geojson.py --mode driving
 `train-trips.csv` contains public endpoints and the OpenStreetMap relation ID needed to rebuild each rail route:
 
 ```csv
-stops,route_id
-EGPE|EGLC,6393945
+stops,route_id,count
+EGPE|EGLC,6393945,1
 ```
 
-Use two location codes separated by `|`. Multiple OpenStreetMap relation IDs may be separated by `|` when one route needs more than one relation.
+Use two location codes separated by `|`. `count` is the total number of train trips represented by the route. Multiple OpenStreetMap relation IDs may be separated by `|` when one route needs more than one relation.
 
 To regenerate only train routes:
 
@@ -95,6 +95,6 @@ That maintenance script preserves existing rows and imports public airport data.
 - `driving-routes.geojson` contains one road geometry per public endpoint pair.
 - `train-routes.geojson` contains one rail geometry per public train route.
 
-Generated feature properties are deliberately minimal. They must not contain personal trip IDs, dates, notes, registrations, frequency counts, or durations.
+Generated feature properties are deliberately minimal. Counts remain in the CSV files and are not duplicated into GeoJSON. Generated properties must not contain personal trip IDs, dates, notes, registrations, or durations.
 
 Do not preview `map.html` as a `file://` URL. Browser security rules commonly block its `fetch()` requests; use the local preview server instead.

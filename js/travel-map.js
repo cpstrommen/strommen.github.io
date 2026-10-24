@@ -289,6 +289,19 @@
     return [from, to].sort().join(':');
   }
 
+  function routeCount(record) {
+    const count = Number(record.count || 1);
+    return Number.isFinite(count) && count > 0 ? count : 1;
+  }
+
+  function routeWeight(baseWeight, count) {
+    return baseWeight + Math.min(4.5, Math.log2(Math.max(count, 1)) * 1.2);
+  }
+
+  function countLabel(count, singular, plural) {
+    return `${count} ${count === 1 ? singular : plural}`;
+  }
+
   function markerOptions(color) {
     return {
       radius: 3,
@@ -325,6 +338,7 @@
       if (renderedRoutes.has(key)) return;
       renderedRoutes.add(key);
 
+      const count = routeCount(flight);
       const color = COLORS[type];
       const from = airportLatLng(origin);
       const to = airportLatLng(destination);
@@ -332,14 +346,15 @@
       const popupHtml = [
         `<strong>${escapeHtml(origin.code)} &harr; ${escapeHtml(destination.code)}</strong>`,
         `<small>${escapeHtml(origin.name)}${origin.name && destination.name ? ' &ndash; ' : ''}${escapeHtml(destination.name)}</small>`,
-        `<small>${type === 'pic' ? 'General aviation' : 'Commercial flight'}</small>`
+        `<small>${type === 'pic' ? 'General aviation' : 'Commercial flight'}</small>`,
+        `<small>${countLabel(count, 'flight', 'flights')}</small>`
       ].filter(Boolean).join('<br/>');
 
       WORLD_OFFSETS.forEach(offset => {
         arcSegments.forEach(segment => {
           L.polyline(shiftSegment(segment, offset), {
             color,
-            weight: 2.5,
+            weight: routeWeight(2.5, count),
             opacity: 0.8,
             noClip: true
           }).addTo(map).bindPopup(popupHtml);
@@ -453,10 +468,11 @@
     return stops;
   }
 
-  function routePopupHtml(label, stops, from, to) {
+  function routePopupHtml(label, stops, count, singular, plural, from, to) {
     return [
       `<strong>${escapeHtml(label)}: ${escapeHtml(from || stops[0])} &rarr; ${escapeHtml(to || stops[stops.length - 1])}</strong>`,
-      `<small>${stops.map(escapeHtml).join(' &rarr; ')}</small>`
+      `<small>${stops.map(escapeHtml).join(' &rarr; ')}</small>`,
+      `<small>${countLabel(count, singular, plural)}</small>`
     ].filter(Boolean).join('<br/>');
   }
 
@@ -487,8 +503,9 @@
         }
 
         renderedRoutes.add(key);
-        const popupHtml = routePopupHtml('Driving', [from, to]);
-        if (addRouteGeometry(feature, COLORS.driving, popupHtml)) {
+        const count = routeCount(trip);
+        const popupHtml = routePopupHtml('Driving', [from, to], count, 'drive', 'drives');
+        if (addRouteGeometry(feature, COLORS.driving, popupHtml, routeWeight(3.5, count))) {
           addAirportMarker(airports.get(from), COLORS.driving, popupHtml);
           addAirportMarker(airports.get(to), COLORS.driving, popupHtml);
         }
@@ -520,8 +537,9 @@
         return;
       }
 
-      const popupHtml = routePopupHtml('Train', stops);
-      if (addRouteGeometry(feature, COLORS.train, popupHtml)) {
+      const count = routeCount(trip);
+      const popupHtml = routePopupHtml('Train', stops, count, 'trip', 'trips');
+      if (addRouteGeometry(feature, COLORS.train, popupHtml, routeWeight(3.5, count))) {
         stops.forEach(stop => addAirportMarker(airports.get(stop), COLORS.train, popupHtml));
       }
     });
