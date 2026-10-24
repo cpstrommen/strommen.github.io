@@ -1,0 +1,71 @@
+#logo {
+	align-items: center;
+	border: 3px solid rgba(255, 255, 255, 0.8);
+	border-radius: 4px;
+	bottom: auto !important;
+	box-sizing: border-box;
+	color: white;
+	display: flex;
+	font: bold italic 24px sans-serif;
+	height: 84px !important;
+	justify-content: center;
+	left: 35px !important;
+	position: absolute !important;
+	text-decoration: none;
+	top: 24px !important;
+	width: 132px !important;
+}
+
+.back-link {
+	background: black;
+	border: 2px solid rgba(255, 255, 255, 0.8);
+	border-radius: 4px;
+	color: white;
+	font: bold 14px sans-serif;
+	padding: 9px 12px;
+	position: fixed;
+	right: 20px;
+	text-decoration: none;
+	top: 20px;
+	z-index: 10;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+	background: white;
+	color: black;
+}
+
+.archive-note {
+	line-height: 1.5;
+	max-width: 650px;
+}
+
+#discription,
+#contact {
+	top: 250px !important;
+}
+
+#sale_header {
+	top: 360px !important;
+}
+
+#sale {
+	top: 400px !important;
+}
+
+#pricehead1 {
+	top: 250px !important;
+}
+
+#pricepara1 {
+	top: 290px !important;
+}
+
+#pricehead2 {
+	top: 350px !important;
+}
+
+#pricepara2 {
+	top: 390px !important;
+}

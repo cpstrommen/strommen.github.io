@@ -43,6 +43,29 @@ h4 {font-weight: 350;}
 h5 {font-weight: 300;}
 h6 {font-weight: 300;}
 
+.experience-section .title {
+  font-size: 2rem;
+}
+
+.experience-section h5 {
+  font-size: 1rem;
+}
+
+.experience-section p,
+.experience-section small {
+  font-size: 0.875rem;
+}
+
+.experience-section .bi-arrow-right {
+  font-size: 1.15rem !important;
+}
+
+.education-heading {
+  margin: 2.5rem 0 1.5rem;
+  font-size: 1.35rem;
+  font-weight: 450;
+}
+
 a {
   color: var(--light);
   font-weight: 250;
