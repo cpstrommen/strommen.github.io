@@ -126,6 +126,8 @@ python3 scripts/update-airports.py
 
 That script preserves existing rows, adds top U.S. airports from FAA data, adds top global airports from BigAirports, and uses OurAirports for coordinates.
 
+Security note: the BigAirports import downloads and evaluates the site's current JavaScript data module. It is a local maintenance tool, not website runtime code; run it only when you trust the configured source.
+
 If a code is still missing, add it manually to `airports.csv`:
 
 ```csv
