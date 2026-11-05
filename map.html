@@ -49,6 +49,39 @@
       opacity: 0.85;
     }
 
+    .travel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .site-return {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex: 0 0 auto;
+      min-height: 38px;
+      padding: 8px 11px;
+      border: 1px solid #4a5056;
+      border-radius: 4px;
+      background: #30353a;
+      color: #f2f2f2;
+      font-size: 0.8125rem;
+      font-weight: 550;
+      text-decoration: none;
+    }
+
+    .site-return:hover {
+      background: #3c4349;
+      color: #f2f2f2;
+    }
+
+    .site-return:focus-visible {
+      outline: 2px solid #f2f2f2;
+      outline-offset: 2px;
+    }
+
     .legend-swatch {
       display: inline-block;
       width: 14px;
@@ -79,8 +112,12 @@
 <body>
 	  <div class="container py-5">
 	    <div class="row gx-5 gy-3">
-	      <div class="col-12">
+	      <div class="col-12 travel-header">
 	        <h1 class="title pb-2 mb-0">Travel</h1>
+          <a class="site-return" href="index.html">
+            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+            <span>Back to strommen.ch</span>
+          </a>
 	      </div>
 
       <div class="col-12">
